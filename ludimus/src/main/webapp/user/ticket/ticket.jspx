@@ -1,0 +1,76 @@
+<custom:ludimusLayout xmlns:custom="urn:jsptagdir:/WEB-INF/tags"
+                      xmlns:jsp="http://java.sun.com/JSP/Page"
+                      xmlns:spring="http://www.springframework.org/tags"
+                      xmlns:form="http://www.springframework.org/tags/form"
+                      xmlns:c="http://java.sun.com/jsp/jstl/core"
+        >
+    <jsp:directive.page contentType="text/html;charset=UTF-8" />
+    <jsp:output omit-xml-declaration="yes" />
+    <form:form commandName="ticketDto" method="post" action="save" enctype="multipart/form-data">
+        <table border="0" style="width: 50%">
+            <tr>
+                <td><spring:message code="ticket.ticketDate"/></td>
+                <td><form:input path="ticketDate" id="ticketDate" cssClass="form-control"/></td>
+                <td><form:errors path="ticketDate" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="ticket.income"/></td>
+                <td>
+                    <form:select  id="incomeType" path="income" cssClass="form-control">
+                        <spring:message code="ticket.true" var="ticketTrue"/>
+                        <form:option value="true" label="${ticketTrue}"/>
+                        <spring:message code="ticket.false" var="ticketFalse"/>
+                        <form:option value="false" label="${ticketFalse}"/>
+                    </form:select>
+                </td>
+                <td>&amp;nbsp;</td>
+            </tr>
+            <tr id="forMonth">
+                <td><spring:message code="ticket.forMonth" /></td>
+                <td>
+                    <form:select path="forMonth" cssClass="form-control">
+                        <c:forEach var="month" items="${months}">
+                            <spring:message var="monthName" code="month_${month}" text="${month}"/>
+                            <form:option value="${month}" label="${monthName}"/>
+                        </c:forEach>
+                    </form:select>
+                </td>
+                <td>&amp;nbsp;</td>
+            </tr>
+            <tr>
+                <td><spring:message code="ticket.invoiceNumber"/></td>
+                <td><form:input path="invoiceNumber" cssClass="form-control"/> </td>
+                <td><form:errors path="invoiceNumber" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="ticket.description"/></td>
+                <td><form:textarea path="description" cssClass="form-control"/> </td>
+                <td><form:errors path="description" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="ticket.price"/></td>
+                <td><form:input path="price" cssClass="form-control"/> </td>
+                <td><form:errors path="price" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="ticket.vatRate"/></td>
+                <td><form:select path="vatRate" cssClass="form-control">
+                    <c:forEach var="vat" items="${vatValues}">
+                        <form:option value="${vat.value}" label="${vat}"/>
+                    </c:forEach>
+
+                </form:select></td>
+                <td><form:errors path="vatRate" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="ticket.ticketImage"/></td>
+                <td><input type="file" name="file" class="btn btn-default"/></td>
+                <td><form:errors path="ticketImage" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td>&amp;nbsp;</td>
+                <td colspan="2"><form:button name="action" value="save" ccsClass="btn btn-default">Ok</form:button> </td>
+            </tr>
+        </table>
+    </form:form>
+    </custom:ludimusLayout>

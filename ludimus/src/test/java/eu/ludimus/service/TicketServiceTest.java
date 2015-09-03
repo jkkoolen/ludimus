@@ -1,7 +1,7 @@
 package eu.ludimus.service;
 
 import eu.ludimus.domain.entity.User;
-import eu.ludimus.service.config.TrackYourHoursServiceConfig;
+import eu.ludimus.service.config.LudimusServiceConfig;
 import eu.ludimus.service.dto.TicketDto;
 import eu.ludimus.service.dto.UserDto;
 import eu.ludimus.service.dto.mapper.UserDtoMapper;
@@ -23,7 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@ContextConfiguration(classes = {TrackYourHoursServiceConfig.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = {LudimusServiceConfig.class}, loader = AnnotationConfigContextLoader.class)
 public class TicketServiceTest extends AbstractTransactionalTestNGSpringContextTests {
     @Autowired
     private TicketService ticketService;
