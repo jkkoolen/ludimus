@@ -9,7 +9,13 @@
     <artifactId>service</artifactId>
     <name>service</name>
 	<dependencies>
-		<!-- Spring and Transactions -->
+        <dependency>
+            <groupId>eu.ludimus</groupId>
+            <artifactId>domain</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <!-- Spring and Transactions -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -65,11 +71,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.framework.security.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>eu.ludimus</groupId>
-			<artifactId>domain</artifactId>
-			<version>${parent.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>

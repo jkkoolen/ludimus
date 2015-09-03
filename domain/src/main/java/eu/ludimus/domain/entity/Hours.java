@@ -1,11 +1,14 @@
 package eu.ludimus.domain.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.*;
 import java.sql.Time;
 
 @Entity
 @Table(name = "hours")
+@Data
 public class Hours extends BaseEntity {
 
     private static final long serialVersionUID = -3776712789057811601L;
@@ -28,49 +31,5 @@ public class Hours extends BaseEntity {
 
     public Hours() {
         //empty
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
-    public Time getEndTime() {
-        return endTime;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public Action getAction()
-    {
-        return action;
-    }
-
-    public void setAction(Action action)
-    {
-        this.action = action;
     }
 }

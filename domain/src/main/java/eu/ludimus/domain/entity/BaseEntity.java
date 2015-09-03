@@ -1,17 +1,13 @@
 package eu.ludimus.domain.entity;
 
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-
 @MappedSuperclass
+@Data
 public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 2369950228434785069L;
 
@@ -41,24 +37,4 @@ public abstract class BaseEntity implements Serializable {
         created = now;
         lastUpdated = now;
     }
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
-
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
 }

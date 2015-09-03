@@ -1,6 +1,7 @@
 package eu.ludimus.web.utility;
 
 public class UploadException extends Exception {
+
     public UploadException() {
     }
 

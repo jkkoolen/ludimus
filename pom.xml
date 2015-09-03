@@ -28,7 +28,7 @@
         <httpcomponents.version>4.3.1</httpcomponents.version>
         <maven.compiler.version>3.1</maven.compiler.version>
         <org.apache.tomcat.version>6.0.29</org.apache.tomcat.version>
-        <jsf.version>2.2.8</jsf.version>
+        <lombok.version>1.14.8</lombok.version>
 	</properties>
 
     <modules>
