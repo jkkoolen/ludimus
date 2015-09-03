@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.ludimus.eu/ticket/"
+	targetNamespace="http://www.ludimus.eu/ticket/">
+	<element name="ticketRequest">
+		<complexType>
+			<all>
+				<element name="security" type="tns:securityType"></element>
+				<element name="ticketDate" type="dateTime" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element name="invoiceNumber" type="string" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element name="description" type="string" maxOccurs="1"
+					minOccurs="0">
+				</element>
+				<element name="price" type="double" maxOccurs="1" minOccurs="1">
+				</element>
+				<element name="vatRate" type="double" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element name="ticketImage" type="base64Binary" maxOccurs="1"
+					minOccurs="1">
+				</element>
+            </all>
+        </complexType>
+	</element>
+
+
+	<element name="ticketResponse">
+		<complexType>
+			<choice>
+				<group ref="tns:errorResponse" />
+				<element name="success" type="string">
+				</element>
+			</choice>
+		</complexType>
+	</element>
+
+	<!-- shared -->
+	<complexType name="errorType">
+		<sequence>
+			<element name="code" type="int" />
+			<element name="message" type="string" />
+		</sequence>
+	</complexType>
+
+	<group name="errorResponse">
+		<sequence>
+			<element name="error" type="tns:errorType" />
+		</sequence>
+	</group>
+	<!-- end shared -->
+
+    <complexType name="securityType">
+    <sequence>
+    	<element name="sha1" type="string" maxOccurs="1"
+					minOccurs="1">
+					<annotation>
+						<documentation>
+							sha1(userName + md5Password + yyyyMMdd)
+						</documentation>
+					</annotation>
+				</element>
+				<element name="userName" type="string" maxOccurs="1"
+					minOccurs="1">
+				</element>
+				<element name="md5Password" type="string" maxOccurs="1"
+					minOccurs="1">
+				</element>
+		</sequence>
+    </complexType>
+</schema>

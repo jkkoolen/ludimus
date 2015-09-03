@@ -1,0 +1,19 @@
+<custom:ludimusLayout xmlns:custom="urn:jsptagdir:/WEB-INF/tags"
+                      xmlns:jsp="http://java.sun.com/JSP/Page"
+                      xmlns:spring="http://www.springframework.org/tags"
+                      xmlns:form="http://www.springframework.org/tags/form"
+                      xmlns:c="http://java.sun.com/jsp/jstl/core"
+        >
+    <jsp:directive.page contentType="text/html;charset=UTF-8" />
+    <jsp:output omit-xml-declaration="yes" />
+    <spring:message code="menu.ticket.new" var="menuTicketNew"/>
+    <spring:message code="menu.ticket.report" var="menuTicketReport"/>
+  <ol>
+      <spring:message code="menu.ticket.new" var="menuTicketNew"/>
+      <spring:message code="menu.ticket.report" var="menuTickerReport"/>
+      <spring:url value="/user/ticket/ticket" var="ticketNew"/>
+      <li><a href="${ticketNew}">${menuTicketNew}</a></li>
+      <spring:url value="/user/ticket/reports" var="reports"/>
+      <li><a href="${reports}">${menuTickerReport}</a></li>
+  </ol>
+</custom:ludimusLayout>

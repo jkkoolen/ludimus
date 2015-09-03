@@ -1,0 +1,15 @@
+.factorypath
+.iml
+.settings
+.project
+.classpath
+*/target
+*/test-output
+*/.settings
+*/.project
+*/.classpath
+*/nb-configuration.xml
+*/nbactions.xml
+*/faces-config.NavData
+/target/
+*/.externalToolBuilders/

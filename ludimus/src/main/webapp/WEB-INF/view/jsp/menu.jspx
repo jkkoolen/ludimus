@@ -1,0 +1,17 @@
+
+<div xmlns:spring="http://www.springframework.org/tags"
+     >
+    <ul class="nav nav-pills">
+        <spring:message code="menu.ticket.new" var="menuTicketNew"/>
+        <spring:message code="menu.ticket.report" var="menuTickerReport"/>
+        <spring:message code="menu.logout" var="menuLogout"/>
+
+        <spring:url value="/user/ticket/ticket" var="ticketNew"/>
+        <li><a href="${ticketNew}">${menuTicketNew}</a></li>
+        <spring:url value="/user/ticket/reports" var="reports"/>
+        <li><a href="${reports}">${menuTickerReport}</a></li>
+        <spring:url value="/logout" var="logout"/>
+        <li><a href="${logout}">${menuLogout}</a></li>
+    </ul>
+    <br/>
+</div>
