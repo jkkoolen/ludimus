@@ -43,7 +43,7 @@ public class TicketServiceTest extends AbstractTransactionalTestNGSpringContextT
             ImageIO.write(image, "jpg", bao);
             final TicketDto ticketDto = ticketService.findById((long) i);
             if(ticketDto != null) {
-                ticketDto.setTicketImage(bao.toByteArray());
+                ticketDto.ticketImage_$eq(bao.toByteArray());
                 ticketService.save(ticketDto);
             }
         }
@@ -53,15 +53,15 @@ public class TicketServiceTest extends AbstractTransactionalTestNGSpringContextT
         assertThat(ticketService, notNullValue());
 
         TicketDto ticketDto = ticketService.save(createTicketDto());
-        final TicketDto byId = ticketService.findById(ticketDto.getId());
-        assertThat(byId.getId(), is(ticketDto.getId()));
+        final TicketDto byId = ticketService.findById(ticketDto.id());
+        assertThat(byId.id(), is(ticketDto.id()));
     }
 
     private TicketDto createTicketDto() {
         TicketDto ticketDto = new TicketDto();
-        ticketDto.setPrice(BigDecimal.ONE);
-        ticketDto.setInvoiceNumber("testnumber");
-        ticketDto.setUser(createUserDto());
+        ticketDto.price_$eq(BigDecimal.ONE);
+        ticketDto.invoiceNumber_$eq("testnumber");
+        ticketDto.user_$eq(createUserDto());
 
         return ticketDto;
     }

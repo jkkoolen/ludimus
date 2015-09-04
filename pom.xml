@@ -29,7 +29,32 @@
         <maven.compiler.version>3.1</maven.compiler.version>
         <org.apache.tomcat.version>6.0.29</org.apache.tomcat.version>
         <lombok.version>1.14.8</lombok.version>
+        <scala.version>2.11.6</scala.version>
 	</properties>
+
+    <!--for scala dependency-->
+    <repositories>
+        <repository>
+            <id>org.jboss.repository.releases</id>
+            <name>JBoss Maven Release Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <modules>
         <module>domain</module>
@@ -39,6 +64,34 @@
 
     <build>
         <plugins>
+            <!--scala plugin-->
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -54,15 +107,5 @@
         </plugins>
     </build>
 
-    <repositories>
-   		<repository>
-   			<id>org.jboss.repository.releases</id>
-   			<name>JBoss Maven Release Repository</name>
-   			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
-   			<snapshots>
-   				<enabled>false</enabled>
-   			</snapshots>
-   		</repository>
-   	</repositories>
 
 </project>

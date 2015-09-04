@@ -94,7 +94,7 @@ public class TicketController {
     @RequestMapping(value = "/ticket")
     public String ticket(Model model) {
         TicketDto ticketDto = new TicketDto();
-        ticketDto.setUser(ludimusSecurityContext.getUserDto());
+        ticketDto.user_$eq(ludimusSecurityContext.getUserDto());
         model.addAttribute(TICKET_DTO, ticketDto);
         return TICKET_VIEW;
     }
@@ -103,13 +103,13 @@ public class TicketController {
     public String save(Model model, @Valid @ModelAttribute TicketDto ticketDto, BindingResult result, @RequestParam("file") MultipartFile file) {
         if(uploadHandler.isPdf(file)) {
             try {
-                ticketDto.setTicketImage(uploadHandler.pdfToJpg(file));
+                ticketDto.ticketImage_$eq(uploadHandler.pdfToJpg(file));
             } catch (UploadException e) {
                 result.addError(new FieldError(TICKET_DTO, TICKET_IMAGE_FIELD, e.getMessage()));
             }
         } else if(uploadHandler.isJpg(file)) {
             try {
-                ticketDto.setTicketImage(IOUtils.toByteArray(file.getInputStream()));
+                ticketDto.ticketImage_$eq(IOUtils.toByteArray(file.getInputStream()));
             } catch (IOException e) {
                 result.addError(new FieldError(TICKET_DTO, TICKET_IMAGE_FIELD, e.getMessage()));
             }
@@ -119,7 +119,7 @@ public class TicketController {
         if(result.hasErrors()) {
             return TICKET_VIEW;
         }
-        ticketDto.setUser(ludimusSecurityContext.getUserDto());
+        ticketDto.user_$eq(ludimusSecurityContext.getUserDto());
         ticketService.save(ticketDto);
         model.addAttribute(Constants.SUCCESS_KEY, "ticket.save.success");
         return ticket(model);

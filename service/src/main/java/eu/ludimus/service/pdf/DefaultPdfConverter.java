@@ -23,11 +23,11 @@ public class DefaultPdfConverter implements PdfConverter{
         }
         try {
             PDDocument document = PDDocument.load(pdf);
-            final List pages = document.getDocumentCatalog().getAllPages();
+            final List<PDPage> pages = document.getDocumentCatalog().getAllPages();
             if(pages.size() != 1) {
                 throw new ConvertException("pdf should contain only 1 page");
             }
-            final PDPage pdPage = (PDPage) pages.get(0);
+            final PDPage pdPage = pages.get(0);
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             ImageIO.write(pdPage.convertToImage(), JPG_FORMAT_NAME, bao);
             return bao.toByteArray();

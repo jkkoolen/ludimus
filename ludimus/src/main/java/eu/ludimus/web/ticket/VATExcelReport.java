@@ -160,7 +160,7 @@ public class VATExcelReport extends AbstractExcelView {
         expenses.put(VAT.VAT_6, BigDecimal.ZERO);
         expenses.put(VAT.VAT_0, BigDecimal.ZERO);
         for(TicketDto t : list) {
-            if(t.isIncome()) {
+            if(t.income()) {
                 put(t, income);
             } else {
                 put(t, expenses);
@@ -171,16 +171,16 @@ public class VATExcelReport extends AbstractExcelView {
 
     private static final BigDecimal MIDDLE = new BigDecimal(6);
     private void put(TicketDto t, Map<VAT, BigDecimal> map) {
-        final int i = MIDDLE.compareTo(t.getVatRate());
+        final int i = MIDDLE.compareTo(t.vatRate());
         switch(i) {
             case 1: // 0
-                map.put(VAT.VAT_0, t.getPrice().add(map.get(VAT.VAT_0)));
+                map.put(VAT.VAT_0, t.price().add(map.get(VAT.VAT_0)));
                 break;
             case 0: // 6
-                map.put(VAT.VAT_6, t.getPrice().add(map.get(VAT.VAT_6)));
+                map.put(VAT.VAT_6, t.price().add(map.get(VAT.VAT_6)));
                 break;
             default: // 21
-                map.put(VAT.VAT_21, t.getPrice().add(map.get(VAT.VAT_21)));
+                map.put(VAT.VAT_21, t.price().add(map.get(VAT.VAT_21)));
                 break;
         }
     }

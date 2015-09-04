@@ -20,20 +20,20 @@ public class TicketDtoMapper {
      * @return Ticket
      */
     public Ticket map(TicketDto source, Ticket target) {
-        target.setId(source.getId());
-        target.setLastUpdated(source.getLastUpdated());
-        target.setCreated(source.getCreated());
-        target.setTicketDate(source.getTicketDate());
-        target.setInvoiceNumber(source.getInvoiceNumber());
-        target.setDescription(source.getDescription());
-        target.setPrice(source.getPrice());
-        target.setVatRate(source.getVatRate());
-        target.setTicketImage(imageService.toJpg(source.getTicketImage()));
-        if(source.getUser() != null)
-            target.setUser(userMapper.map(source.getUser(), target.getUser() == null ? new User() : target.getUser()));
-        target.setIncome(source.isIncome());
-        if(source.getForMonth() != null) {
-            target.setForMonth(source.getForMonth());
+        target.setId(source.id());
+        target.setLastUpdated(source.lastUpdated());
+        target.setCreated(source.created());
+        target.setTicketDate(source.ticketDate());
+        target.setInvoiceNumber(source.invoiceNumber());
+        target.setDescription(source.description());
+        target.setPrice(source.price());
+        target.setVatRate(source.vatRate());
+        target.setTicketImage(imageService.toJpg(source.ticketImage()));
+        if(source.user() != null)
+            target.setUser(userMapper.map(source.user(), target.getUser() == null ? new User() : target.getUser()));
+        target.setIncome(source.income());
+        if(source.forMonth() != null) {
+            target.setForMonth(source.forMonth());
         }
         return target;
     }
@@ -48,18 +48,19 @@ public class TicketDtoMapper {
             return null;
         }
         TicketDto target = new TicketDto();
-        target.setId(source.getId());
-        target.setLastUpdated(source.getLastUpdated());
-        target.setCreated(source.getCreated());
-        target.setTicketDate(source.getTicketDate());
-        target.setInvoiceNumber(source.getInvoiceNumber());
-        target.setDescription(source.getDescription());
-        target.setPrice(source.getPrice());
-        target.setVatRate(source.getVatRate());
-        target.setTicketImage(source.getTicketImage());
-        target.setUser(userMapper.map(source.getUser()));
-        target.setIncome(source.isIncome());
-        target.setForMonth(source.getForMonth());
+
+        target.id_$eq(source.getId());
+        target.lastUpdated_$eq(source.getLastUpdated());
+        target.created_$eq(source.getCreated());
+        target.ticketDate_$eq(source.getTicketDate());
+        target.invoiceNumber_$eq(source.getInvoiceNumber());
+        target.description_$eq(source.getDescription());
+        target.price_$eq(source.getPrice());
+        target.vatRate_$eq(source.getVatRate());
+        target.ticketImage_$eq(source.getTicketImage());
+        target.user_$eq(userMapper.map(source.getUser()));
+        target.income_$eq(source.isIncome());
+        target.forMonth_$eq(source.getForMonth());
         return target;
     }
 

@@ -12,7 +12,7 @@ public class UserDtoMapper {
         target.setCreated(source.getCreated());
         target.setName(source.getName());
         target.setPassword(source.getPassword());
-        target.setActive(source.isActive());
+        target.setActive(source.active());
         target.setRole(source.getRole());
         target.setResetToken(source.getResetToken());
         return target;
@@ -28,7 +28,7 @@ public class UserDtoMapper {
             return null;
         }
         UserDto target = new UserDto();
-        target.setId(source.getId());
+        target.id_$eq(source.getId());
         target.setLastUpdated(source.getLastUpdated());
         target.setCreated(source.getCreated());
         target.setName(source.getName());

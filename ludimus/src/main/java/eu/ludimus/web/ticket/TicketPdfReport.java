@@ -39,12 +39,12 @@ public class TicketPdfReport extends AbstractPdfView {
         final List<TicketDto> ticketDtoList = (List<TicketDto>) model.get(DATA_KEY);
         try {
             for(TicketDto t : ticketDtoList) {
-                document.add(new Paragraph(t.getInvoiceNumber() + EURO + t.getPrice()));
-                if(t.getTicketImage() != null) { //no ticket available
-                    final java.awt.Image image = Toolkit.getDefaultToolkit().createImage(t.getTicketImage());
+                document.add(new Paragraph(t.invoiceNumber() + EURO + t.price()));
+                if(t.ticketImage() != null) { //no ticket available
+                    final java.awt.Image image = Toolkit.getDefaultToolkit().createImage(t.ticketImage());
                     document.add(getOptimalFit(Image.getInstance(image, Color.white), document));
                 } else {
-                    document.add(new Paragraph(t.getDescription()));
+                    document.add(new Paragraph(t.description()));
                 }
                 document.newPage();
             }
