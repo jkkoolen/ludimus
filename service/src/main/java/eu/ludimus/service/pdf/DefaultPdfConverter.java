@@ -1,6 +1,9 @@
 package eu.ludimus.service.pdf;
 
 
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.springframework.stereotype.Service;
@@ -9,10 +12,11 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.List;
 
 @Service
-public class DefaultPdfConverter implements PdfConverter{
+public class DefaultPdfConverter implements PdfConverter {
 
     public static final String JPG_FORMAT_NAME = "jpg";
 
@@ -34,5 +38,19 @@ public class DefaultPdfConverter implements PdfConverter{
         } catch (IOException e) {
             throw new ConvertException(e);
         }
+    }
+
+    @Override
+    public Document toDocument(String htmlPage) throws ConvertException {
+        final Document document = new Document(PageSize.A4);
+        try {
+            HTMLWorker worker = new HTMLWorker(document);
+            worker.parse(new StringReader(htmlPage));
+            document.close();
+
+        } catch (IOException e) {
+            throw new ConvertException(e);
+        }
+        return document;
     }
 }

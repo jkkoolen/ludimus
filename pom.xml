@@ -29,6 +29,8 @@
         <maven.compiler.version>3.1</maven.compiler.version>
         <org.apache.tomcat.version>6.0.29</org.apache.tomcat.version>
         <lombok.version>1.14.8</lombok.version>
+        <freemarker.version>2.3.20</freemarker.version>
+        <itext.version>2.1.7.js2</itext.version>
 	</properties>
 
     <modules>

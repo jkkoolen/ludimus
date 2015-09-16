@@ -120,12 +120,7 @@
 			<version>3.10-FINAL</version>
 		</dependency>
 
-        <!--itextpdf for creating pdf reports-->
-        <dependency>
-            <groupId>com.lowagie</groupId>
-            <artifactId>itext</artifactId>
-            <version>2.1.7.js2</version>
-        </dependency>
+
 
         <!-- Apache Commons-lang 3 -->
 		<dependency>
