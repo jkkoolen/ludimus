@@ -1,26 +1,26 @@
-package eu.ludimus.web.ticket;
+package eu.ludimus.web.ticket.pdf;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Image;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import eu.ludimus.service.dto.TicketDto;
+import eu.ludimus.web.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.document.AbstractPdfView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Component
 public class TicketPdfReport extends AbstractPdfView {
     final String DATA_KEY = "ticketDtoList";
-    private static final String NAME = "TicketReport";
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String INLINE_FILENAME = "inline; filename=\"%s.pdf\"";
     public static final String EURO = " , € ";
@@ -34,7 +34,7 @@ public class TicketPdfReport extends AbstractPdfView {
 
     @Override
     protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setHeader(CONTENT_DISPOSITION, String.format(INLINE_FILENAME,NAME));
+        response.setHeader(CONTENT_DISPOSITION, String.format(INLINE_FILENAME,String.format("TicketReport%s", Constants.suffix.format(new Date()))));
 
         final List<TicketDto> ticketDtoList = (List<TicketDto>) model.get(DATA_KEY);
         try {

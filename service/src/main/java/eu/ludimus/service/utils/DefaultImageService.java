@@ -1,6 +1,7 @@
 package eu.ludimus.service.utils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
@@ -11,22 +12,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class DefaultImageService implements ImageService {
-	private final Logger logger = Logger.getLogger(this.getClass());
-
+    private Logger log = LoggerFactory.getLogger(DefaultImageService.class);
 	public byte[] resize(byte[] image, int newWidth, int newHeight) {
 		BufferedImage result;
 
 		try {
 			result = ImageIO.read(new ByteArrayInputStream(image));
             if(result == null) {
-                logger.warn("byte[] is not an image");
+                log.warn("byte[] is not an image");
                 return null;
             }
 
 			if (newWidth == 0 || newHeight == 0) {
-				logger.warn(String.format(
-						"No valid width : %s  or height : %s", newWidth,
-						newHeight));
+				log.warn(String.format(
+                        "No valid width : %s  or height : %s", newWidth,
+                        newHeight));
 				return null;
 			}
 
@@ -48,7 +48,7 @@ public class DefaultImageService implements ImageService {
 			}
 			return toByteArray(result);
 		} catch (IOException e) {
-			logger.warn("Image could not be read", e);
+			log.warn("Image could not be read", e);
 			return null;
 		}
 	}
@@ -61,7 +61,7 @@ public class DefaultImageService implements ImageService {
         try {
             return toByteArray(ImageIO.read(new ByteArrayInputStream(originalImage)));
         } catch (IOException e) {
-            logger.warn("Image could not be read", e);
+            log.warn("Image could not be read", e);
         }
         return null;
     }

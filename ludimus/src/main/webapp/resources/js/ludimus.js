@@ -16,6 +16,7 @@ $(function() {
            $('#forMonth').hide();
        }
     });
+    $("#endPeriod").datepicker({ dateFormat: 'dd-mm-yy' });
     setTimeout(function(){
         var $overallmessage = $('#overallmessage');
         if ($overallmessage.length > 0) {

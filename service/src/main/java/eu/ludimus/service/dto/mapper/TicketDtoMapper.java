@@ -11,56 +11,63 @@ import org.springframework.stereotype.Component;
 public class TicketDtoMapper {
 	@Autowired
 	private ImageService imageService;
-    private UserDtoMapper userMapper = new UserDtoMapper();
+    private UserDtoMapper userDtoMapper = new UserDtoMapper();
 
     /**
      * user will not be mapped.
-     * @param source to be mapped
-     * @param target to which it will be mapped
+     * @param dto to be mapped
+     * @param entity to which it will be mapped
      * @return Ticket
      */
-    public Ticket map(TicketDto source, Ticket target) {
-        target.setId(source.getId());
-        target.setLastUpdated(source.getLastUpdated());
-        target.setCreated(source.getCreated());
-        target.setTicketDate(source.getTicketDate());
-        target.setInvoiceNumber(source.getInvoiceNumber());
-        target.setDescription(source.getDescription());
-        target.setPrice(source.getPrice());
-        target.setVatRate(source.getVatRate());
-        target.setTicketImage(imageService.toJpg(source.getTicketImage()));
-        if(source.getUser() != null)
-            target.setUser(userMapper.map(source.getUser(), target.getUser() == null ? new User() : target.getUser()));
-        target.setIncome(source.isIncome());
-        if(source.getForMonth() != null) {
-            target.setForMonth(source.getForMonth());
+    public Ticket map(TicketDto dto, Ticket entity) {
+        if(entity == null) {
+            entity = new Ticket();
         }
-        return target;
+        if(dto == null) {
+            return entity;
+        }
+        entity.setId(dto.getId());
+        entity.setLastUpdated(dto.getLastUpdated());
+        entity.setCreated(dto.getCreated());
+        entity.setTicketDate(dto.getTicketDate());
+        entity.setInvoiceNumber(dto.getInvoiceNumber());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setVatRate(dto.getVatRate());
+        entity.setTicketImage(imageService.toJpg(dto.getTicketImage()));
+        if(dto.getUser() != null) {
+            entity.setUser(userDtoMapper.map(dto.getUser(), entity.getUser() == null ? new User() : entity.getUser()));
+        }
+        entity.setIncome(dto.isIncome());
+        if(dto.getForMonth() != null) {
+            entity.setForMonth(dto.getForMonth());
+        }
+        return entity;
     }
 
     /**
      *
-     * @param source to map from
-     * @return TicketDto, can be null if source is null
+     * @param entity to map from
+     * @return TicketDto, can be null if entity is null
      */
-    public TicketDto map(Ticket source) {
-        if(source == null) {
+    public TicketDto map(Ticket entity) {
+        if(entity == null) {
             return null;
         }
-        TicketDto target = new TicketDto();
-        target.setId(source.getId());
-        target.setLastUpdated(source.getLastUpdated());
-        target.setCreated(source.getCreated());
-        target.setTicketDate(source.getTicketDate());
-        target.setInvoiceNumber(source.getInvoiceNumber());
-        target.setDescription(source.getDescription());
-        target.setPrice(source.getPrice());
-        target.setVatRate(source.getVatRate());
-        target.setTicketImage(source.getTicketImage());
-        target.setUser(userMapper.map(source.getUser()));
-        target.setIncome(source.isIncome());
-        target.setForMonth(source.getForMonth());
-        return target;
+        TicketDto dto = new TicketDto();
+        dto.setId(entity.getId());
+        dto.setLastUpdated(entity.getLastUpdated());
+        dto.setCreated(entity.getCreated());
+        dto.setTicketDate(entity.getTicketDate());
+        dto.setInvoiceNumber(entity.getInvoiceNumber());
+        dto.setDescription(entity.getDescription());
+        dto.setPrice(entity.getPrice());
+        dto.setVatRate(entity.getVatRate());
+        dto.setTicketImage(entity.getTicketImage());
+        dto.setUser(userDtoMapper.map(entity.getUser()));
+        dto.setIncome(entity.isIncome());
+        dto.setForMonth(entity.getForMonth());
+        return dto;
     }
 
 }

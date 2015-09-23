@@ -1,0 +1,50 @@
+<custom:ludimusLayout xmlns:custom="urn:jsptagdir:/WEB-INF/tags"
+                      xmlns:jsp="http://java.sun.com/JSP/Page"
+                      xmlns:spring="http://www.springframework.org/tags"
+                      xmlns:form="http://www.springframework.org/tags/form"
+                      xmlns:c="http://java.sun.com/jsp/jstl/core"
+                      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+
+        >
+    <jsp:directive.page contentType="text/html;charset=UTF-8" />
+    <jsp:output omit-xml-declaration="yes" />
+    <form:form action="create" commandName="invoiceProperties" method="POST">
+        <table border="0" style="width: 50%">
+            <tr>
+                <td><spring:message code="invoice.title"/></td>
+                <td>${invoiceProperties.name}</td>
+                <td><fmt:formatDate  pattern="dd-MM-yyyy" value="${invoiceProperties.invoiceDate}"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="invoice.invoiceNumber"/></td>
+                <td><form:input path="invoiceNumber" cssClass="form-control"/></td>
+                <td><form:errors path="invoiceNumber" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="invoice.endPeriod"/></td>
+                <td><form:input path="endPeriod" id="endPeriod" cssClass="form-control"/></td>
+                <td><form:errors path="endPeriod" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="invoice.description"/></td>
+                <td><form:textarea path="description" cssClass="form-control"/></td>
+                <td><form:errors path="description" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="invoice.units"/></td>
+                <td><form:input path="units" cssClass="form-control"/></td>
+                <td><form:errors path="units" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td><spring:message code="invoice.fare"/></td>
+                <td><form:input path="fare" cssClass="form-control"/></td>
+                <td><form:errors path="fare" cssClass="alert-danger"/></td>
+            </tr>
+            <tr>
+                <td>&amp;nbsp;</td>
+                <td colspan="2"><form:button name="action" value="save" ccsClass="btn btn-default">Ok</form:button> </td>
+            </tr>
+        </table>
+    </form:form>
+</custom:ludimusLayout>
+

@@ -16,27 +16,8 @@
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.framework.version}</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.framework.version}</version>
-		</dependency>
-
-        <!-- AspectJ -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>${org.aspectj.version}</version>
 		</dependency>
 
 		<!-- Logging -->
@@ -145,13 +126,8 @@
 
 		<dependency>
 			<groupId>eu.ludimus</groupId>
-			<artifactId>domain</artifactId>
-			<version>${parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>eu.ludimus</groupId>
 			<artifactId>service</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 
 		<dependency>
@@ -194,6 +170,7 @@
 			<plugin> <!-- plugin for generating the webservices -->
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.12.3</version>
 				<configuration>
 					<args>
 						<arg>-npa</arg>

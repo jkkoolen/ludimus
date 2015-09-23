@@ -2,8 +2,11 @@ package eu.ludimus.web.ticket;
 
 import eu.ludimus.service.authentication.LudimusSecurityContext;
 import eu.ludimus.service.dto.TicketDto;
+import eu.ludimus.service.ticket.InvoiceProperties;
 import eu.ludimus.service.ticket.TicketService;
 import eu.ludimus.web.Constants;
+import eu.ludimus.web.ticket.pdf.InvoicePdfReport;
+import eu.ludimus.web.ticket.pdf.TicketPdfReport;
 import eu.ludimus.web.utility.UploadException;
 import eu.ludimus.web.utility.UploadHandler;
 import org.apache.commons.io.IOUtils;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +32,10 @@ import java.util.List;
 @RequestMapping("/user/ticket")
 public class TicketController {
     private static final String TICKET_VIEW = "/user/ticket/ticket";
+    private static final String CREATE_INVOICE_VIEW = "/user/ticket/invoice";
     private static final String TICKET_REPORT_VIEW = "/user/ticket/reports";
     private static final String TICKET_DTO = "ticketDto";
+    private static final String INVOICE_PROPERTIES = "invoiceProperties";
     private static final String REPORT_CRITERIA = "reportCriteria";
     private static final String TICKET_IMAGE_FIELD = "ticketImage";
     @Autowired
@@ -38,12 +44,14 @@ public class TicketController {
     private LudimusSecurityContext ludimusSecurityContext;
     @Autowired
     private UploadHandler uploadHandler;
-
     @Autowired
     private VATExcelReport vatExcelReport;
-
     @Autowired
     private TicketPdfReport ticketPdfReport;
+    @Autowired
+    private InvoicePdfReport invoicePdfReport;
+    @Autowired
+    private Validator validator;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -99,6 +107,27 @@ public class TicketController {
         return TICKET_VIEW;
     }
 
+    @RequestMapping(value = "/create")
+    public ModelAndView createInvoice(@RequestParam(value = "action", required = true) String action,
+                                @ModelAttribute InvoiceProperties properties, BindingResult result,
+                                Model model) {
+        final InvoiceProperties ip = createInvoiceProperties();
+        if("init".equals(action)) {
+            model.addAttribute(INVOICE_PROPERTIES, ip);
+        } else if("save".equals(action)) {
+            properties.setAddress(ip.getAddress());
+            properties.setUser(ip.getUser());
+            validator.validate(properties, result);
+            if(result.hasErrors()) {
+                model.addAttribute(INVOICE_PROPERTIES, properties);
+            }
+            return invoicePdfReport.createModelAndView(properties);
+        }
+        model.addAttribute(Constants.ERROR_KEY, "invoice.error");
+
+        return new ModelAndView(CREATE_INVOICE_VIEW);
+    }
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(Model model, @Valid @ModelAttribute TicketDto ticketDto, BindingResult result, @RequestParam("file") MultipartFile file) {
         if(uploadHandler.isPdf(file)) {
@@ -136,7 +165,7 @@ public class TicketController {
         if(result.hasErrors()) {
             return new ModelAndView(TICKET_REPORT_VIEW);
         }
-        final List<TicketDto> list = ticketService.findBetweenTicketDate(ludimusSecurityContext.getUser(), criteria.getFromDate(), criteria.getToDate());
+        final List<TicketDto> list = ticketService.findBetweenTicketDate(ludimusSecurityContext.getUserDto(), criteria.getFromDate(), criteria.getToDate());
         if(list.isEmpty()) {
             model.addAttribute(Constants.WARNING_KEY, "error.notickets");
             return new ModelAndView(TICKET_REPORT_VIEW);
@@ -149,5 +178,12 @@ public class TicketController {
             model.addAttribute("list", list);
         }
         return new ModelAndView(TICKET_REPORT_VIEW);
+    }
+
+    private InvoiceProperties createInvoiceProperties() {
+        final InvoiceProperties properties = new InvoiceProperties();
+        properties.setUser(ludimusSecurityContext.getUserDto());
+        properties.setAddress(ticketService.findByUser(ludimusSecurityContext.getUserDto()));
+        return properties;
     }
 }

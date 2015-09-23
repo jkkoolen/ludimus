@@ -1,13 +1,10 @@
 package eu.ludimus.domain.entity;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-@Data
 public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 2369950228434785069L;
 
@@ -36,5 +33,25 @@ public abstract class BaseEntity implements Serializable {
         Date now = new Date();
         created = now;
         lastUpdated = now;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

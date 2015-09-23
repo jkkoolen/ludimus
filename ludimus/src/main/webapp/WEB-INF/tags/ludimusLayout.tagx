@@ -26,6 +26,10 @@
         <c:if test="${not empty WARNING}">
             <div id="overallmessage" class="alert alert-warning"><spring:message code="${WARNING}"/></div>
         </c:if>
+        <c:if test="${not empty ERROR}">
+            <div id="overallmessage" class="alert alert-error"><spring:message code="${ERROR}"/></div>
+        </c:if>
+
         <br/>
     </div>
 

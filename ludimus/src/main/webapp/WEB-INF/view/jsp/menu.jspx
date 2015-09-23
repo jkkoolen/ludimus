@@ -1,17 +1,31 @@
 
 <div xmlns:spring="http://www.springframework.org/tags"
      >
-    <ul class="nav nav-pills">
+    <!--<ul class="nav nav-pills">-->
+
+
         <spring:message code="menu.ticket.new" var="menuTicketNew"/>
-        <spring:message code="menu.ticket.report" var="menuTickerReport"/>
+        <spring:message code="menu.ticket.create" var="menuCreateTicket"/>
+        <spring:message code="menu.ticket.report" var="menuTicketReport"/>
         <spring:message code="menu.logout" var="menuLogout"/>
 
         <spring:url value="/user/ticket/ticket" var="ticketNew"/>
-        <li><a href="${ticketNew}">${menuTicketNew}</a></li>
         <spring:url value="/user/ticket/reports" var="reports"/>
-        <li><a href="${reports}">${menuTickerReport}</a></li>
+        <spring:url value="/user/ticket/create?action=init" var="createTicket"/>
         <spring:url value="/logout" var="logout"/>
-        <li><a href="${logout}">${menuLogout}</a></li>
-    </ul>
-    <br/>
+
+        <div class="btn-group" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Factuur
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="${ticketNew}">${menuTicketNew}</a></li>
+                    <li><a href="${createTicket}">${menuCreateTicket}</a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-default"><a href="${reports}">${menuTicketReport}</a></button>
+            <button type="button" class="btn btn-default"><a href="${logout}">${menuLogout}</a></button>
+        </div>
 </div>
