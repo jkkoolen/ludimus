@@ -56,3 +56,16 @@ function setPeriod(a) {
     $('#fromDate').datepicker("setDate", from);
     $('#toDate').datepicker("setDate", to);
 }
+
+function showImage(id) {
+    var img = $(id);
+    img.show();
+    $("#dialog").dialog({
+        modal:true,
+        width:img.width(),
+        height:img.height(),
+        close: function( event, ui ) {
+            img.hide();
+        }
+    });
+}

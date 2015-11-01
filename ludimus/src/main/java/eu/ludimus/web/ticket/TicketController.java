@@ -2,6 +2,7 @@ package eu.ludimus.web.ticket;
 
 import eu.ludimus.service.authentication.LudimusSecurityContext;
 import eu.ludimus.service.dto.TicketDto;
+import eu.ludimus.service.pdf.ConvertException;
 import eu.ludimus.service.ticket.InvoiceProperties;
 import eu.ludimus.service.ticket.TicketService;
 import eu.ludimus.web.Constants;
@@ -11,6 +12,8 @@ import eu.ludimus.web.utility.UploadException;
 import eu.ludimus.web.utility.UploadHandler;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -52,6 +59,7 @@ public class TicketController {
     private InvoicePdfReport invoicePdfReport;
     @Autowired
     private Validator validator;
+    private Logger logger = LoggerFactory.getLogger(TicketController.class);
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -109,8 +117,8 @@ public class TicketController {
 
     @RequestMapping(value = "/create")
     public ModelAndView createInvoice(@RequestParam(value = "action", required = true) String action,
-                                @ModelAttribute InvoiceProperties properties, BindingResult result,
-                                Model model) {
+                                @ModelAttribute final InvoiceProperties properties, BindingResult result,
+                                final Model model) {
         final InvoiceProperties ip = createInvoiceProperties();
         if("init".equals(action)) {
             model.addAttribute(INVOICE_PROPERTIES, ip);
@@ -121,7 +129,19 @@ public class TicketController {
             if(result.hasErrors()) {
                 model.addAttribute(INVOICE_PROPERTIES, properties);
             }
-            return invoicePdfReport.createModelAndView(properties);
+            return invoicePdfReport.createModelAndView(properties, new InvoicePdfReport.PdfInterceptor() {
+                @Override
+                public void intercept(ByteArrayOutputStream pdfBytes) {
+                    try {
+                        final ByteArrayInputStream input = new ByteArrayInputStream(pdfBytes.toByteArray());
+                        pdfBytes.flush();
+                        saveTicket(properties, input);
+                    } catch (Exception e) {
+                        logger.error(e.getMessage(), e);
+                        model.addAttribute(Constants.ERROR_KEY, "invoice.error");
+                    }
+                }
+            });
         }
         model.addAttribute(Constants.ERROR_KEY, "invoice.error");
 
@@ -185,5 +205,23 @@ public class TicketController {
         properties.setUser(ludimusSecurityContext.getUserDto());
         properties.setAddress(ticketService.findByUser(ludimusSecurityContext.getUserDto()));
         return properties;
+    }
+
+    private void saveTicket(InvoiceProperties properties, InputStream input) throws ConvertException {
+        logger.info("start saveTicket");
+        final TicketDto ticketDto = new TicketDto();
+        ticketDto.setUser(properties.getUser());
+        ticketDto.setDescription(properties.getDescription());
+        ticketDto.setIncome(true);
+        ticketDto.setInvoiceNumber(properties.getInvoiceNumber());
+        ticketDto.setTicketDate(properties.getInvoiceDate());
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(properties.getEndPeriod());
+        ticketDto.setForMonth(calendar.get(Calendar.MONTH));
+        ticketDto.setVatRate(VAT.VAT_21.getValue());
+        ticketDto.setPrice(BigDecimal.valueOf(properties.getNet()));
+        ticketDto.setTicketImage(uploadHandler.pdfToJpg(input));
+        ticketService.save(ticketDto);
+        logger.info("end saveTicket");
     }
 }

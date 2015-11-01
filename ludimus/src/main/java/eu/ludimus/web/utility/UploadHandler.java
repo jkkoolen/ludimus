@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Component
 public class UploadHandler {
@@ -32,18 +33,21 @@ public class UploadHandler {
     }
 
     public byte[] pdfToJpg(MultipartFile part) throws UploadException {
-        if(!isPdf(part)) {
+        if (!isPdf(part)) {
             throw new UploadException("File is not a pdf file");
         }
-
         try {
-            return pdfConverter.toJpg(part.getInputStream());
-        } catch (ConvertException e) {
-            logger.error(e.getMessage(), e);
-            throw new UploadException(e.getMessage());
+            return pdfToJpg(part.getInputStream());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             throw new UploadException(e.getMessage());
+        } catch (ConvertException e) {
+            logger.error(e.getMessage(), e);
+            throw new UploadException(e.getMessage());
         }
+    }
+
+    public byte[] pdfToJpg(InputStream input) throws ConvertException {
+        return pdfConverter.toJpg(input);
     }
 }

@@ -19,10 +19,10 @@ public class InvoiceProperties {
     @NotEmpty
     private String description;
     @NotNull
-    @NumberFormat(style = NumberFormat.Style.NUMBER,pattern = "####.##")
+    @NumberFormat(pattern = "####,##")
     private Double units;
     @NotNull
-    @NumberFormat(style = NumberFormat.Style.NUMBER,pattern = "####.##")
+    @NumberFormat(pattern = "####,##")
     private Double fare;
     @NotNull
     private UserDto user;

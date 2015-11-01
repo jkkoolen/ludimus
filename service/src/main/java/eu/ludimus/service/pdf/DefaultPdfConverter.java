@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 @Service
 public class DefaultPdfConverter implements PdfConverter {
@@ -23,11 +22,10 @@ public class DefaultPdfConverter implements PdfConverter {
         }
         try {
             PDDocument document = PDDocument.load(pdf);
-            final List<PDPage> pages = document.getDocumentCatalog().getAllPages();
-            if(pages.size() != 1) {
+            if(document.getNumberOfPages() != 1) {
                 throw new ConvertException("pdf should contain only 1 page");
             }
-            final PDPage pdPage = pages.get(0);
+            final PDPage pdPage = (PDPage) document.getDocumentCatalog().getAllPages().get(0);
             ByteArrayOutputStream bao = new ByteArrayOutputStream();
             ImageIO.write(pdPage.convertToImage(), JPG_FORMAT_NAME, bao);
             return bao.toByteArray();

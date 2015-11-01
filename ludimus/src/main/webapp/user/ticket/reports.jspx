@@ -39,12 +39,14 @@
             </c:forEach>
         </table>
     </form:form>
+    <div id="dialog" title="Invoice dialog">&amp;nbsp;</div>
     <c:if test="${not empty list}">
         <table class="table table-striped table-bordered">
             <c:forEach var="item" items="${list}" varStatus="status">
                 <c:if test="${status.begin}">
                     <tr>
                         <th><spring:message code="ticket.ID"/></th>
+                        <th><spring:message code="ticket.BALANCE"/></th>
                         <th><spring:message code="ticket.TICKET_DATE"/></th>
                         <th><spring:message code="ticket.INVOICE_NUMBER"/></th>
                         <th><spring:message code="ticket.DESCRIPTION"/></th>
@@ -52,13 +54,19 @@
                         <th><spring:message code="ticket.VAT_RATE"/></th>
                     </tr>
                 </c:if>
-                <tr>
+                <tr onclick="showImage('#img_${item.id}');">
                     <td>${item.id}</td>
+                    <td style="font-weight: bold">${item.income ? " + " : " - "}</td>
                     <td>${item.ticketDate}</td>
                     <td>${item.invoiceNumber}</td>
                     <td>${item.description}</td>
                     <td>${item.price}</td>
                     <td>${item.vatRate}</td>
+                    <c:if test="${not empty item.base64Image}">
+                        <script>
+                            $("#dialog").append('<img style="display:none" width="400px" height="600px"  id="img_${item.id}" src="data:image/jpeg;base64,${item.base64Image}" />');
+                        </script>
+                    </c:if>
                 </tr>
             </c:forEach>
         </table>

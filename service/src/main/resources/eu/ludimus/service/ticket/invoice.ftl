@@ -11,6 +11,9 @@
         </td>
     </tr>
     <tr>
+        <td colspan="6">&nbsp;</td>
+    </tr>
+    <tr>
         <td colspan="2">
             ${properties.name}
         </td>
@@ -55,8 +58,11 @@
         </td>
     </tr>
     <tr>
+        <td colspan="6">&nbsp;</td>
+    </tr>
+    <tr>
         <td colspan="6">
-            <h3>Beschrijving</h3>
+            <h3 class="bold">Beschrijving</h3>
         </td>
     </tr>
     <tr>
@@ -103,9 +109,9 @@
     </tr>
     <tr>
         <td colspan="6">
-            Bank: ${properties.bank}<br/>
-            IBAN: ${properties.IBAN}<br/>
-            BIC: ${properties.BIC}<br/>
+            <label class="bold">Bank:</label> ${properties.bank}<br/>
+            <label class="bold">IBAN:</label> ${properties.IBAN}<br/>
+            <label class="bold">BIC:</label> ${properties.BIC}<br/>
             Factuur te betalen in overeenstemming met de overeenkomst.
         </td>
     </tr>

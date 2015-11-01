@@ -3,10 +3,12 @@ package eu.ludimus.service.dto;
 import eu.ludimus.service.dto.validation.CheckImage;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 
 @CheckImage
@@ -21,11 +23,13 @@ public class TicketDto {
     private String invoiceNumber;
     private String description;
     @NotNull
+    @NumberFormat(pattern = "####,##")
     private BigDecimal price;
     @NotNull
     private BigDecimal vatRate;
     private byte[] ticketImage;
     private boolean income;
+    private String base64Image;
 
     @NotNull
     @Valid
@@ -126,5 +130,32 @@ public class TicketDto {
 
     public void setForMonth(Integer forMonth) {
         this.forMonth = forMonth;
+    }
+
+    public String getBase64Image() {
+        return base64Image;
+    }
+
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketDto{" +
+                "id=" + id +
+                ", lastUpdated=" + lastUpdated +
+                ", created=" + created +
+                ", ticketDate=" + ticketDate +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", vatRate=" + vatRate +
+                ", ticketImage=" + Arrays.toString(ticketImage) +
+                ", income=" + income +
+                ", base64Image='" + base64Image + '\'' +
+                ", user=" + user +
+                ", forMonth=" + forMonth +
+                '}';
     }
 }

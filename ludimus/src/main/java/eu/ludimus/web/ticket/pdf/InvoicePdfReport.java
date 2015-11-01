@@ -13,18 +13,18 @@ import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.end.PdfWriterPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
-import eu.ludimus.service.pdf.PdfConverter;
 import eu.ludimus.service.ticket.InvoiceModel;
 import eu.ludimus.service.ticket.InvoiceProperties;
 import eu.ludimus.service.utils.freemarker.FreeMarkerHelper;
 import eu.ludimus.web.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.Map;
@@ -34,18 +34,25 @@ public class InvoicePdfReport extends AbstractPdfView {
     final String DATA_KEY = "invoiceProperties";
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String INLINE_FILENAME = "inline; filename=\"%s.pdf\"";
-    @Autowired
-    private PdfConverter pdfConverter;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private PdfInterceptor interceptor;
+    public static interface PdfInterceptor {
+        public void intercept(ByteArrayOutputStream pdfBytes);
+    }
 
     public final ModelAndView createModelAndView(InvoiceProperties invoiceProperties) {
-        return new ModelAndView(this,DATA_KEY, invoiceProperties);
+        return new ModelAndView(this, DATA_KEY, invoiceProperties);
+    }
+
+    public final ModelAndView createModelAndView(InvoiceProperties invoiceProperties, PdfInterceptor interceptor) {
+        this.interceptor = interceptor;
+        return new ModelAndView(this, DATA_KEY, invoiceProperties);
     }
 
     @Override
     protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setHeader(CONTENT_DISPOSITION, String.format(INLINE_FILENAME,String.format("Invoice_%s", Constants.suffix.format(new Date()))));
+        response.setHeader(CONTENT_DISPOSITION, String.format(INLINE_FILENAME, String.format("Invoice_%s", Constants.suffix.format(new Date()))));
 
         final InvoiceProperties invoiceProperties = (InvoiceProperties) model.get(DATA_KEY);
         // CSS
@@ -67,5 +74,12 @@ public class InvoicePdfReport extends AbstractPdfView {
         XMLParser p = new XMLParser(worker);
         p.parse(new StringReader(FreeMarkerHelper.convertModelToHtml(new InvoiceModel(invoiceProperties))));
 
+    }
+
+    protected void writeToResponse(HttpServletResponse response, ByteArrayOutputStream baos) throws IOException {
+        super.writeToResponse(response, baos);
+        if(interceptor != null) {
+            interceptor.intercept(baos);
+        }
     }
 }

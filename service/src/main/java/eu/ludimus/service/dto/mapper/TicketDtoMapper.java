@@ -1,5 +1,6 @@
 package eu.ludimus.service.dto.mapper;
 
+import com.itextpdf.text.pdf.codec.Base64;
 import eu.ludimus.domain.entity.Ticket;
 import eu.ludimus.domain.entity.User;
 import eu.ludimus.service.dto.TicketDto;
@@ -63,7 +64,9 @@ public class TicketDtoMapper {
         dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
         dto.setVatRate(entity.getVatRate());
-        dto.setTicketImage(entity.getTicketImage());
+        if(entity.getTicketImage() != null) {
+            dto.setBase64Image(Base64.encodeBytes(entity.getTicketImage()).replaceAll("\n",""));
+        }
         dto.setUser(userDtoMapper.map(entity.getUser()));
         dto.setIncome(entity.isIncome());
         dto.setForMonth(entity.getForMonth());
