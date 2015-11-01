@@ -5,6 +5,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.codec.Base64;
 import eu.ludimus.service.dto.TicketDto;
 import eu.ludimus.web.Constants;
 import org.slf4j.Logger;
@@ -40,8 +41,8 @@ public class TicketPdfReport extends AbstractPdfView {
         try {
             for(TicketDto t : ticketDtoList) {
                 document.add(new Paragraph(t.getInvoiceNumber() + EURO + t.getPrice()));
-                if(t.getTicketImage() != null) { //no ticket available
-                    final java.awt.Image image = Toolkit.getDefaultToolkit().createImage(t.getTicketImage());
+                if(t.getBase64Image() != null) { //no ticket available
+                    final java.awt.Image image = Toolkit.getDefaultToolkit().createImage(Base64.decode(t.getBase64Image()));
                     document.add(getOptimalFit(Image.getInstance(image, Color.white), document));
                 } else {
                     document.add(new Paragraph(t.getDescription()));
