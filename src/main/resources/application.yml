@@ -1,0 +1,15 @@
+spring:
+    datasource:
+        password: build
+        testWhileIdle: true
+        url: jdbc:mysql://localhost:3306/ludimus?useSSL=false
+        username: build
+        validationQuery: SELECT 1
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5Dialect
+        show-sql: true
+

@@ -1,3 +1,0 @@
-<div xmlns:spring="http://www.springframework.org/tags">
-    <spring:message code="menu.footer" /><spring:message code="application.version" />
-</div>

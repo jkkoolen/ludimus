@@ -1,8 +1,0 @@
-<custom:ludimusLayout xmlns:custom="urn:jsptagdir:/WEB-INF/tags"
-                      xmlns:jsp="http://java.sun.com/JSP/Page"
-                      xmlns:spring="http://www.springframework.org/tags"
-        >
-    <jsp:directive.page contentType="text/html;charset=UTF-8" />
-    <jsp:output omit-xml-declaration="yes" />
-    <spring:message code="menu.logout.text"/>
-</custom:ludimusLayout>
