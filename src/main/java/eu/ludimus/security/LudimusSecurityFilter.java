@@ -33,25 +33,29 @@ public class LudimusSecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        LOGGER.info(">>>>>>>>>>>> " + httpServletRequest.getRequestURI());
-        final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        if(isStatic(httpServletRequest.getRequestURI())) {
+        LOGGER.info(request.getRemoteAddr());
+        final HttpServletRequest httpRequest = (HttpServletRequest) request;
+        LOGGER.info(">>>>>>>>>>>> " + httpRequest.getRequestURI());
+        final HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if(isStatic(httpRequest.getRequestURI())) {
             chain.doFilter(request, response);
             return;
         }
-        if("/ludimus/login".equals(httpServletRequest.getRequestURI())
-                || isPreflight(httpServletRequest)) {
+        if("/ludimus/login".equals(httpRequest.getRequestURI())
+                || isPreflight(httpRequest)) {
             chain.doFilter(request, response);
             return;
         }
-        if(validToken(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)))
+        if(validToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION)))
         {
             chain.doFilter(request, response);
             return;
         }
 
-        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        httpResponse.getWriter().write("{\"error\" : \"Not authorized\"}");
+        httpResponse.getWriter().flush();
+        httpResponse.getWriter().close();
     }
 
     private boolean isStatic(final String uri) {
