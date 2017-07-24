@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.MessageDigest;
+import static eu.ludimus.hash.HashUtil.md5;
+import static eu.ludimus.hash.HashUtil.toHex;
 
 @Service
 public class UserService {
@@ -22,31 +23,17 @@ public class UserService {
         if(auth == null) {
             return null;
         }
-        return userRepository.findByNameAndPassword(auth.getName(), toHex(md5(auth.getPassword())));
+        return userRepository.findByEmailAndPassword(auth.getEmail(), toHex(md5(auth.getPassword())));
+    }
+
+    @Transactional
+    public User save(final User user) {
+        user.setPassword(toHex(md5(user.getPassword())));
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id);
-    }
-
-
-    private byte[] md5(final String password) {
-        try {
-            final MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(password.getBytes());
-            return md5.digest();
-        } catch(Exception e) {
-            logger.error("Error digesting password ", e);
-            return new byte[0];
-        }
-    }
-
-    private String toHex(final byte[] bytes) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < bytes.length; i++) {
-            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
     }
 }

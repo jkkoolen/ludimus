@@ -1,10 +1,8 @@
 package eu.ludimus.controller;
 
-import eu.ludimus.model.Auth;
-import eu.ludimus.model.ErrorInfo;
-import eu.ludimus.model.Token;
-import eu.ludimus.model.User;
-import eu.ludimus.security.NotAuthorizedException;
+import eu.ludimus.exception.InvalidException;
+import eu.ludimus.model.*;
+import eu.ludimus.exception.NotAuthorizedException;
 import eu.ludimus.service.Auth0Service;
 import eu.ludimus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,15 @@ import java.io.UnsupportedEncodingException;
 
 @RestController
 public class Auth0Controller {
+    private final UserService userService;
+    private final Auth0Service auth0Service;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private Auth0Service auth0Service;
+    public Auth0Controller(UserService userService, Auth0Service auth0Service) {
+
+        this.userService = userService;
+        this.auth0Service = auth0Service;
+    }
 
     @CrossOrigin
     @RequestMapping(value = "/ludimus/login", method = RequestMethod.POST)
@@ -31,10 +34,32 @@ public class Auth0Controller {
         return auth0Service.createToken(user);
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/ludimus/changeLogin", method = RequestMethod.POST)
+    @ResponseBody
+    public Token changeLogin(final @RequestBody ChangeAuth auth) throws UnsupportedEncodingException {
+        final User user = userService.findByAuth(auth);
+        if(user == null) {
+            throw new NotAuthorizedException("User is not authorized to change password");
+        }
+        if(auth.getNewPassword1() == null || auth.getNewPassword2() == null || !auth.getNewPassword1().equals(auth.getNewPassword2())) {
+            throw new InvalidException("new passwords are empty or not equal");
+        }
+        user.setPassword(auth.getNewPassword1());
+        return auth0Service.createToken(userService.save(user));
+    }
+
     @ExceptionHandler(NotAuthorizedException.class)
     @ResponseStatus(value=HttpStatus.UNAUTHORIZED)
-    public ErrorInfo notAuthorized() {
-        return new ErrorInfo("NOT_AUTORIZED", "user not authorized");
+    public ErrorInfo notAuthorized(final NotAuthorizedException e) {
+        return new ErrorInfo("NOT_AUTORIZED", e.getMessage());
+
+    }
+
+    @ExceptionHandler(InvalidException.class)
+    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    public ErrorInfo invalid(final InvalidException e) {
+        return new ErrorInfo("BAD_REQUEST", e.getMessage());
 
     }
 

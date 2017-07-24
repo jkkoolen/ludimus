@@ -1,4 +1,4 @@
-package eu.ludimus.security;
+package eu.ludimus.exception;
 
 public class NotAuthorizedException extends RuntimeException {
     public NotAuthorizedException() {

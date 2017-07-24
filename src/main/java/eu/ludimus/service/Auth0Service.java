@@ -24,7 +24,7 @@ public class Auth0Service {
         calendar.add(Calendar.MINUTE, 30);
         return new Token(JWT.create()
                 .withClaim("id", String.valueOf(user.getId()))
-                .withClaim("name", user.getName())
+                .withClaim("email", user.getEmail())
                 .withClaim("exp", calendar.getTime())
                 .sign(Algorithm.HMAC256(user.getPassword())));
     }
@@ -48,7 +48,7 @@ public class Auth0Service {
         }catch(NumberFormatException e) {
             logger.debug("JWT contains invalid id");
         }
-        return (decode.getClaim("name").asString().equals(user.getName()));
+        return (decode.getClaim("email").asString().equals(user.getEmail()));
     }
 
     public Long idFromAuthorizationHeader(final String authorization) {

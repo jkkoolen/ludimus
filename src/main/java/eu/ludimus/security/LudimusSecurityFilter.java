@@ -35,7 +35,6 @@ public class LudimusSecurityFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         LOGGER.info(request.getRemoteAddr());
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        LOGGER.info(">>>>>>>>>>>> " + httpRequest.getRequestURI());
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
         if(isStatic(httpRequest.getRequestURI())) {
             chain.doFilter(request, response);

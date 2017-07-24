@@ -1,32 +1,33 @@
 package eu.ludimus.model;
 
 public class Auth {
-    private String name;
+    private String email;
     private String password;
 
     public Auth() {
 
     }
 
-    public Auth(String name, String password) {
-        this.name = name;
+    public Auth(final String email,final String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
+    public Auth setEmail(String email) {
+        this.email = email;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
+    public Auth setPassword(String password) {
+        this.password = password;
+        return this;
+    }
 }

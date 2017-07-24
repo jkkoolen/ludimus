@@ -19,8 +19,8 @@ public class User extends BaseEntity {
         ROLE_USER
     }
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "email")
+	private String email;
 	
 	@Column(name = "password")
 	private String password;
@@ -50,12 +50,12 @@ public class User extends BaseEntity {
     @Column(name = "full_name")
     private String fullName;
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -133,7 +133,7 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return super.toString() + "--> User{" +
-                "name='" + name + '\'' +
+                "email='" + email + '\'' +
                 ", active=" + active +
                 ", role=" + role +
                 ", bank='" + bank + '\'' +
