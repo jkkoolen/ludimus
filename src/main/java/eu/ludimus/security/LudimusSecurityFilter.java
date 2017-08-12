@@ -41,6 +41,7 @@ public class LudimusSecurityFilter implements Filter {
             return;
         }
         if("/ludimus/login".equals(httpRequest.getRequestURI())
+                || "/ludimus/distance".equals(httpRequest.getRequestURI())
                 || isPreflight(httpRequest)) {
             chain.doFilter(request, response);
             return;

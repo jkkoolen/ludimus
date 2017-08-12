@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNull;
 @ComponentScan(basePackages = "eu.ludimus.service")
 @DataJpaTest
 @TestPropertySource(locations="classpath:test.properties")
-public class TicketRepositoryTest {
+public class UserRepositoryTest {
 
     public static final String PASSWORD = "secret";
     public static final String EMAIL = "jkkoolen@gmail.com";
@@ -33,7 +33,6 @@ public class TicketRepositoryTest {
 
     @Test
     public void findById() {
-
         final User persist = this.entityManager.persist(createUser());
         User user = repository.findById(persist.getId());
         assertEquals(user.getEmail(),persist.getEmail());

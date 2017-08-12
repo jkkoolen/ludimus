@@ -7,11 +7,12 @@ import eu.ludimus.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,16 +21,16 @@ public class TicketController {
     private TicketService ticketService;
     @Autowired
     private Auth0Service auth0Service;
-    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    private static Logger logger = LoggerFactory.getLogger(TicketService.class);
-
+    private static Logger logger = LoggerFactory.getLogger(TicketController.class);
 
     @CrossOrigin
     @RequestMapping(value = "/ludimus/overview", method = RequestMethod.GET)
     @ResponseBody
-    public List<Ticket> getOverview(final HttpServletRequest request, final @RequestParam String from, final @RequestParam String to) throws ParseException {
+    public List<Ticket> getOverview(final HttpServletRequest request,
+                                    final @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") Date from,
+                                    final @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") Date to) throws ParseException {
         logger.info("getOverview with from : {} and to : {}", from, to);
-        return ticketService.getAllTickets(auth0Service.idFromAuthorizationHeader(request.getHeader("Authorization")), DATE_FORMAT.parse(from), DATE_FORMAT.parse(to));
+        return ticketService.getAllTickets(auth0Service.idFromAuthorizationHeader(request.getHeader("Authorization")), from, to);
     }
 
     @CrossOrigin

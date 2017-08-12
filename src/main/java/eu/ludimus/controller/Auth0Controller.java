@@ -62,6 +62,4 @@ public class Auth0Controller {
         return new ErrorInfo("BAD_REQUEST", e.getMessage());
 
     }
-
-
 }
