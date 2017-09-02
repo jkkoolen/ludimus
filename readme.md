@@ -2,6 +2,7 @@
 
 
 ### Build and run
+mvn clean install
 
 #### Configurations
 
