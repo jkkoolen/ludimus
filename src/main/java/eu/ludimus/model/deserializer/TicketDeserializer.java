@@ -9,7 +9,6 @@ import eu.ludimus.converter.ConverterFactoy;
 import eu.ludimus.model.Ticket;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -42,12 +41,12 @@ public class TicketDeserializer extends JsonDeserializer<Ticket> {
             byte[] data = Base64.getDecoder().decode(base64String.getBytes("UTF-8"));
             try {
                 final byte[] ticketImage = ConverterFactoy.createConverter(ticketFilename.toUpperCase().endsWith(".PDF") ? PDF : IMAGE).toJpg(new ByteArrayInputStream(data));
-                final FileOutputStream s1 = new FileOutputStream(ticketFilename);
-                s1.write(data);
-                s1.flush();s1.close();
-                final FileOutputStream s = new FileOutputStream(ticketFilename + ".jpg");
-                s.write(ticketImage);
-                s.flush();s.close();
+//                final FileOutputStream s1 = new FileOutputStream(ticketFilename);
+//                s1.write(data);
+//                s1.flush();s1.close();
+//                final FileOutputStream s = new FileOutputStream(ticketFilename + ".jpg");
+//                s.write(ticketImage);
+//                s.flush();s.close();
                 ticket.setTicketImage(ticketImage);
             } catch (ConvertException e) {
                 throw new IOException(e.getCause());
