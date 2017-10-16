@@ -2,8 +2,7 @@ package eu.ludimus.security;
 
 import eu.ludimus.model.Token;
 import eu.ludimus.service.Auth0Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -22,8 +21,8 @@ import java.io.IOException;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@Slf4j
 public class LudimusSecurityFilter implements Filter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LudimusSecurityFilter.class);
     @Autowired
     private Auth0Service auth0Service;
 
@@ -33,10 +32,10 @@ public class LudimusSecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        LOGGER.info(request.getRemoteAddr());
+        log.info(request.getRemoteAddr());
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
-        if(isStatic(httpRequest.getRequestURI())) {
+        if(isStatic(httpRequest.getRequestURI().toLowerCase())) {
             chain.doFilter(request, response);
             return;
         }
@@ -44,6 +43,10 @@ public class LudimusSecurityFilter implements Filter {
                 || "/ludimus/distance".equals(httpRequest.getRequestURI())
                 || isPreflight(httpRequest)) {
             chain.doFilter(request, response);
+            return;
+        }
+        if(httpRequest.getRequestURI().matches("/ludimus/tax.*")) {
+            httpRequest.getRequestDispatcher("/ludimus/index.html").forward(request, response);
             return;
         }
         if(validToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION)))
@@ -95,7 +98,6 @@ public class LudimusSecurityFilter implements Filter {
                 ||   uri.endsWith(".ppt")
                 ||   uri.endsWith(".mid")
                 ||   uri.endsWith(".webp")
-                ||   uri.endsWith(".jar")
                 ||   uri.endsWith(".html");
     }
 
@@ -107,7 +109,6 @@ public class LudimusSecurityFilter implements Filter {
         if(header != null && header.startsWith("Bearer ")) {
             final String token = header.substring("Bearer".length()).trim();
             return auth0Service.isValid(new Token(token));
-
         }
         return false;
     }
