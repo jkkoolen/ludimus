@@ -21,7 +21,6 @@ import static eu.ludimus.converter.ConverterFactoy.ConverterType.PDF;
 
 public class TicketDeserializer extends JsonDeserializer<Ticket> {
     private SimpleDateFormat JAVASCRIPT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    private int count;
 
     @Override
     public Ticket deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
@@ -34,6 +33,13 @@ public class TicketDeserializer extends JsonDeserializer<Ticket> {
                 .setInvoiceNumber(node.get("invoiceNumber").asText())
                 .setDescription(node.get("description").asText())
                 .setVatRate(BigDecimal.valueOf(node.get("vatRate").asDouble()));
+
+        final JsonNode depreciationYears = node.get("depreciationYears");
+        final JsonNode yearOfEntry = node.get("yearOfEntry");
+        if(depreciationYears != null && yearOfEntry != null) {
+                ticket.setDepreciationYears(depreciationYears.asInt())
+                .setYearOfEntry(yearOfEntry.asInt());
+        }
         final String ticketFilename = node.get("ticketFilename").asText();
         final String attachment = node.get("ticketImage").asText();
         if (attachment != null && attachment.indexOf(',') > -1) {

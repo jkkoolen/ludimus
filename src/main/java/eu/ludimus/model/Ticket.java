@@ -42,9 +42,14 @@ public class Ticket extends BaseEntity {
    	@ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-
     @Column(name = "for_month")
     private Integer forMonth;
+
+    @Column(name = "depreciation_years")
+    private Integer depreciationYears;
+
+    @Column(name = "year_of_entry")
+    private Integer yearOfEntry;
 
     public Ticket() {
         //empty
@@ -137,6 +142,24 @@ public class Ticket extends BaseEntity {
 
     public Ticket setCarcost(boolean carcost) {
         this.carcost = carcost;
+        return this;
+    }
+
+    public Integer getDepreciationYears() {
+        return depreciationYears;
+    }
+
+    public Ticket setDepreciationYears(Integer depreciationYears) {
+        this.depreciationYears = depreciationYears;
+        return this;
+    }
+
+    public Integer getYearOfEntry() {
+        return yearOfEntry;
+    }
+
+    public Ticket setYearOfEntry(Integer yearOfEntry) {
+        this.yearOfEntry = yearOfEntry;
         return this;
     }
 
