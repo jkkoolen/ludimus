@@ -23,8 +23,12 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class LudimusSecurityFilter implements Filter {
+
     @Autowired
     private Auth0Service auth0Service;
+
+    @Autowired
+    private LudimusProperties ludimusProperties;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -35,20 +39,24 @@ public class LudimusSecurityFilter implements Filter {
         log.info(request.getRemoteAddr());
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
-        if(isStatic(httpRequest.getRequestURI().toLowerCase())) {
+        final String requestURI = httpRequest.getRequestURI();
+
+        if(ludimusProperties.isStatic(requestURI)) {
             chain.doFilter(request, response);
             return;
         }
-        if("/ludimus/login".equals(httpRequest.getRequestURI())
-                || "/ludimus/distance".equals(httpRequest.getRequestURI())
+
+        if(ludimusProperties.isPublic(requestURI)
                 || isPreflight(httpRequest)) {
             chain.doFilter(request, response);
             return;
         }
-        if(httpRequest.getRequestURI().matches("/ludimus/tax.*")) {
-            httpRequest.getRequestDispatcher("/ludimus/index.html").forward(request, response);
+
+        if(ludimusProperties.shouldForward(requestURI)) {
+            httpRequest.getRequestDispatcher(ludimusProperties.getForwardUrl(requestURI)).forward(request, response);
             return;
         }
+
         if(validToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION)))
         {
             chain.doFilter(request, response);
@@ -59,46 +67,6 @@ public class LudimusSecurityFilter implements Filter {
         httpResponse.getWriter().write("{\"error\" : \"Not authorized\"}");
         httpResponse.getWriter().flush();
         httpResponse.getWriter().close();
-    }
-
-    private boolean isStatic(final String uri) {
-        return uri.endsWith(".css")
-                ||   uri.endsWith(".map")
-                ||   uri.endsWith(".bmp")
-                ||   uri.endsWith(".tif")
-                ||   uri.endsWith(".ttf")
-                ||   uri.endsWith(".docx")
-                ||   uri.endsWith(".woff")
-                ||   uri.endsWith(".woff2")
-                ||   uri.endsWith(".js")
-                ||   uri.endsWith(".pict")
-                ||   uri.endsWith(".tiff")
-                ||   uri.endsWith(".eot")
-                ||   uri.endsWith(".xlsx")
-                ||   uri.endsWith(".jpg")
-                ||   uri.endsWith(".csv")
-                ||   uri.endsWith(".eps")
-                ||   uri.endsWith(".xls")
-                ||   uri.endsWith(".jpeg")
-                ||   uri.endsWith(".doc")
-                ||   uri.endsWith(".ejs")
-                ||   uri.endsWith(".otf")
-                ||   uri.endsWith(".pptx")
-                ||   uri.endsWith(".gif")
-                ||   uri.endsWith(".pdf")
-                ||   uri.endsWith(".swf")
-                ||   uri.endsWith(".svg")
-                ||   uri.endsWith(".ps")
-                ||   uri.endsWith(".ico")
-                ||   uri.endsWith(".pls")
-                ||   uri.endsWith(".midi")
-                ||   uri.endsWith(".svgz")
-                ||   uri.endsWith(".class")
-                ||   uri.endsWith(".png")
-                ||   uri.endsWith(".ppt")
-                ||   uri.endsWith(".mid")
-                ||   uri.endsWith(".webp")
-                ||   uri.endsWith(".html");
     }
 
     private boolean isPreflight(final HttpServletRequest request) {

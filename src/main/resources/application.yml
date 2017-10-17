@@ -1,9 +1,9 @@
 spring:
     datasource:
         password: build
-        testWhileIdle: true
         url: jdbc:mysql://localhost:3306/ludimus?useSSL=false
         username: build
+        testWhileIdle: true
         validationQuery: SELECT 1
     jpa:
         hibernate:
@@ -11,10 +11,60 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5Dialect
-        show-sql: true
+        show-sql: false
 
 logging:
   level:
     org:
       hibernate:
-        type: trace
+        type: error
+  file: ludimus-debug.log
+
+ludimus:
+  filter:
+    authorized:
+      - path: /ludimus/login
+      - path: /ludimus/distance
+    forwards:
+      - path: /ludimus/tax
+        to: /ludimus/index.html
+      - path: /ludimus/tax/overview
+        to: /ludimus/index.html
+    statics:
+      - ext: .css
+      - ext: .map
+      - ext: .bmp
+      - ext: .tif
+      - ext: .ttf
+      - ext: .docx
+      - ext: .woff
+      - ext: .woff2
+      - ext: .js
+      - ext: .pict
+      - ext: .tiff
+      - ext: .eot
+      - ext: .xlsx
+      - ext: .jpg
+      - ext: .csv
+      - ext: .eps
+      - ext: .xls
+      - ext: .jpeg
+      - ext: .doc
+      - ext: .ejs
+      - ext: .otf
+      - ext: .pptx
+      - ext: .gif
+      - ext: .pdf
+      - ext: .swf
+      - ext: .svg
+      - ext: .ps
+      - ext: .ico
+      - ext: .pls
+      - ext: .midi
+      - ext: .svgz
+      - ext: .class
+      - ext: .png
+      - ext: .ppt
+      - ext: .mid
+      - ext: .webp
+      - ext: .html
