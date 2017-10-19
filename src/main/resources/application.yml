@@ -3,7 +3,7 @@ spring:
         password: build
         url: jdbc:mysql://localhost:3306/ludimus?useSSL=false
         username: build
-        testWhileIdle: true
+        testOnBorrow: true
         validationQuery: SELECT 1
     jpa:
         hibernate:
@@ -29,6 +29,14 @@ ludimus:
       - path: /ludimus/tax
         to: /ludimus/index.html
       - path: /ludimus/tax/overview
+        to: /ludimus/index.html
+      - path: /ludimus/home
+        to: /ludimus/index.html
+      - path: /ludimus/tax/addTicket
+        to: /ludimus/index.html
+      - path: /ludimus/tax/kmr
+        to: /ludimus/index.html
+      - path: /ludimus/changeLogin
         to: /ludimus/index.html
     statics:
       - ext: .css
