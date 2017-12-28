@@ -1,5 +1,9 @@
 package eu.ludimus.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +15,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
+@NoArgsConstructor
+@Getter
+@Setter
 public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 2369950228434785069L;
 
@@ -25,9 +32,9 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "created")
     private Date created;
 
-	public Long getId() {
-		return id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
 	
     @PreUpdate
     public void preUpdate() {
@@ -41,32 +48,32 @@ public abstract class BaseEntity implements Serializable {
         lastUpdated = now;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public Date getLastUpdated() {
+//        return lastUpdated;
+//    }
+//
+//    public void setLastUpdated(Date lastUpdated) {
+//        this.lastUpdated = lastUpdated;
+//    }
+//
+//    public Date getCreated() {
+//        return created;
+//    }
+//
+//    public void setCreated(Date created) {
+//        this.created = created;
+//    }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    @Override
-    public String toString() {
-        return "BaseEntity{" +
-                "id=" + id +
-                ", lastUpdated=" + lastUpdated +
-                ", created=" + created +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "BaseEntity{" +
+//                "id=" + id +
+//                ", lastUpdated=" + lastUpdated +
+//                ", created=" + created +
+//                '}';
+//    }
 }

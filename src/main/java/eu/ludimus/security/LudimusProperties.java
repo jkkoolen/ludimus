@@ -22,8 +22,7 @@ public class LudimusProperties {
         return getFilter().getAuthorized().stream().filter((authorized) -> {
             System.out.println(authorized.path + " " + path);
             return authorized.path.equals(path);
-        }
-        ).count() > 0;
+        }).findAny().isPresent();
     }
 
     public boolean shouldForward(final String path) {

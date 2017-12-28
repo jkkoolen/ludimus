@@ -18,17 +18,17 @@ public class KmrDeserializer extends JsonDeserializer<Kmr> {
     @Override
     public Kmr deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         final JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        final Kmr kmr = new Kmr()
-                .setBusiness(node.get("isBusiness").asBoolean())
-                .setOrigin(node.get("origin").asText())
-                .setDestination(node.get("destination").asText())
-                .setStartTotal(node.get("startTotal").asInt())
-                .setEndTotal(node.get("endTotal").asInt());
+        final Kmr.KmrBuilder kmrBuilder = Kmr.builder()
+                .isBusiness(node.get("isBusiness").asBoolean())
+                .origin(node.get("origin").asText())
+                .destination(node.get("destination").asText())
+                .startTotal(node.get("startTotal").asInt())
+                .endTotal(node.get("endTotal").asInt());
         try {
-            kmr.setDay(JAVASCRIPT_DATE_FORMAT.parse(node.get("day").asText()));
+            kmrBuilder.day(JAVASCRIPT_DATE_FORMAT.parse(node.get("day").asText()));
         } catch (ParseException e) {
-            kmr.setDay(new Date());
+            kmrBuilder.day(new Date());
         }
-        return kmr;
+        return kmrBuilder.build();
     }
 }

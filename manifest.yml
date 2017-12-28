@@ -1,0 +1,7 @@
+#this file is used for deploying application in pivitol cloud foundry
+applications:
+- name: ludimus
+  memory: 1G
+  host: ludimus
+  path: target/ludimus-0.0.4-SNAPSHOT.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git

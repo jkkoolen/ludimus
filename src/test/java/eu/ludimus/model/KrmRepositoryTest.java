@@ -59,21 +59,19 @@ public class KrmRepositoryTest {
     }
 
     private Kmr createKmr(final User persitedUser) {
-        final Kmr kmr = new Kmr();
-        kmr.setDay(NOW);
-        kmr.setOrigin("Mattenbiesstraat 137, Amsterdan");
-        kmr.setDestination("Croeselaan 7, Utrecht");
-        kmr.setBusiness(true);
-        kmr.setEndTotal(159844);
-        kmr.setStartTotal(159800);
-        kmr.setUser(persitedUser);
-        return kmr;
+        return Kmr.builder()
+                .day(NOW)
+                .origin("Mattenbiesstraat 137, Amsterdan")
+                .destination("Croeselaan 7, Utrecht")
+                .isBusiness(true)
+                .endTotal(159844)
+                .startTotal(159800)
+                .user(persitedUser).build();
     }
 
     private User createUser() {
-        final User user = new User();
-        user.setEmail("jkkoolen@gmail.com");
-        user.setPassword(toHex(md5("secret")));
-        return user;
+        return User.builder()
+                .email("jkkoolen@gmail.com")
+                .password(toHex(md5("secret"))).build();
     }
 }

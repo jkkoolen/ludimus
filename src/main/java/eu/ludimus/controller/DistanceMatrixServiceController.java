@@ -50,7 +50,7 @@ public class DistanceMatrixServiceController {
     @ResponseBody
     public Kmr addKmr(final HttpServletRequest request, final @RequestBody Kmr kmr) throws ParseException, InterruptedException, IOException {
         logger.info(kmr.toString());
-        final User user = new User();
+        final User user = User.builder().build();
         final Long userId = auth0Service.idFromAuthorizationHeader(request.getHeader("Authorization"));
         user.setId(userId);
         kmr.setUser(user);
@@ -59,7 +59,7 @@ public class DistanceMatrixServiceController {
             throw new InvalidException("Difference to big with last registration, probably you mist one");
         }
         if(lastKmr != null) {
-            kmr.setStartTotal(lastKmr.getEndTotal()); //to make it wathertight
+            kmr.setStartTotal(lastKmr.getEndTotal()); //to make it watertight
         }
         return kmrService.addKmr(kmr);
     }

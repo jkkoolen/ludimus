@@ -47,9 +47,6 @@ public class UserRepositoryTest {
     }
 
     private User createUser() {
-        final User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(toHex(md5(PASSWORD)));
-        return user;
+        return User.builder().email(EMAIL).password(toHex(md5(PASSWORD))).build();
     }
 }

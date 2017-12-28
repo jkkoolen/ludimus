@@ -37,7 +37,7 @@ public class TicketController {
     @RequestMapping(value = "/ludimus/addTicket", method = RequestMethod.POST)
     @ResponseBody
     public Ticket addTicket(final HttpServletRequest request, final @RequestBody Ticket ticket) {
-        final User user = new User();
+        final User user = User.builder().build();
         user.setId(auth0Service.idFromAuthorizationHeader(request.getHeader("Authorization")));
         ticket.setUser(user);
         return ticketService.addTicket(ticket);

@@ -20,6 +20,10 @@ logging:
         type: error
   file: ludimus-debug.log
 
+jedis:
+  pool:
+    host: redis://:@localhost:6379/
+
 ludimus:
   filter:
     authorized:

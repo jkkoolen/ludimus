@@ -5,6 +5,7 @@
 
     <groupId>eu.ludimus</groupId>
     <artifactId>ludimus</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.4-SNAPSHOT</version>
 
     <parent>
@@ -23,6 +24,7 @@
         <spring-test.version>4.3.3.RELEASE</spring-test.version>
         <java-jwt.version>3.1.0</java-jwt.version>
         <converters.version>0.0.1</converters.version>
+        <rethinkdb-driver.version>2.3.3</rethinkdb-driver.version>
     </properties>
 
     <dependencies>
@@ -81,6 +83,13 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
     </dependencies>
 
 
