@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -18,14 +17,12 @@ public class TicketService {
     @Autowired
     private TicketRedis ticketRedis;
 
-    @Transactional(readOnly = true)
     public List<Ticket> getAllTickets(final Long userId, final Date from, final Date to) {
         final User user = User.builder().build();
         user.setId(userId);
         return ticketRedis.findByUserAndTicketDateBetween(user, from, to);
     }
 
-    @Transactional
     public Ticket addTicket(final Ticket ticket) {
         return ticketRedis.save(ticket);
     }

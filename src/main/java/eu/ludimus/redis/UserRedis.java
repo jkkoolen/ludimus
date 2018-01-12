@@ -15,6 +15,12 @@ public class UserRedis extends AbstractRedis<User> {
     @Override
     public User save(final User user) {
         return (User) run(jedis -> {
+            boolean isNew = user.getId() == null;
+            if(isNew) {
+                user.preUpdate();
+            } else {
+                user.prePersist();
+            }
             user.setId(getId(User.class, user.getId()));
             final String key = name() + ':' + user.getId();
             jedis.sadd(name() + ":keys", key);

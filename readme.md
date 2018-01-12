@@ -1,4 +1,5 @@
-## Using MySQL in Spring Boot via Spring Data JPA and Hibernate
+## Using Redis in Spring Boot 
+
 
 
 ### Build and run
@@ -18,3 +19,8 @@ Open the `application.properties` file and set your own configurations.
 Go on the project's root folder, then type:
 
     $ mvn spring-boot:run
+
+#### Redis
+This app stores all data in a redis db which is a inmem db with persitence to disk
+
+``

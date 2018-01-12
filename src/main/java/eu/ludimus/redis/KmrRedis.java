@@ -19,6 +19,11 @@ public class KmrRedis extends AbstractRedis<Kmr> {
     public Kmr save(final Kmr kmr) {
         return (Kmr) run(jedis -> {
             boolean isNew = kmr.getId() == null;
+            if(isNew) {
+                kmr.preUpdate();
+            } else {
+                kmr.prePersist();
+            }
             kmr.setId(getId(Kmr.class, kmr.getId()));
 
             final String key = name(Kmr.class) + ':' + kmr.getId() + ":" + name(User.class) + ":" + kmr.getUser().getId();

@@ -5,8 +5,7 @@
 
     <groupId>eu.ludimus</groupId>
     <artifactId>ludimus</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,7 +23,6 @@
         <spring-test.version>4.3.3.RELEASE</spring-test.version>
         <java-jwt.version>3.1.0</java-jwt.version>
         <converters.version>0.0.1</converters.version>
-        <rethinkdb-driver.version>2.3.3</rethinkdb-driver.version>
     </properties>
 
     <dependencies>
@@ -42,18 +40,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
@@ -76,11 +62,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring-test.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->

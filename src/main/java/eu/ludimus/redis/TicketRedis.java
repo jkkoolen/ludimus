@@ -22,6 +22,12 @@ public class TicketRedis extends AbstractRedis<Ticket> {
     @Override
     public Ticket save(final Ticket ticket) {
         return (Ticket) run(jedis -> {
+            boolean isNew = ticket.getId() == null;
+            if(isNew) {
+                ticket.preUpdate();
+            } else {
+                ticket.prePersist();
+            }
             ticket.setId(getId(Ticket.class, ticket.getId()));
             final String key = name(Ticket.class) + ':' + ticket.getId() + ":" + name(User.class) + ":" + ticket.getUser().getId();
             jedis.sadd(name(Ticket.class) + ":keys:" + name(User.class) + ":" + ticket.getUser().getId(), key);

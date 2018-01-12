@@ -1,1 +1,0 @@
-ALTER TABLE `ticket` ADD COLUMN `income` tinyint(1) DEFAULT TRUE;
