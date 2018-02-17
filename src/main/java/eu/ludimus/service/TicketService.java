@@ -26,4 +26,5 @@ public class TicketService {
     public Ticket addTicket(final Ticket ticket) {
         return ticketRedis.save(ticket);
     }
- }
+
+}

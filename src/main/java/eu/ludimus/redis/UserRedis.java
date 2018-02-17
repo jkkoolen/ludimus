@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -69,7 +70,7 @@ public class UserRedis extends AbstractRedis<User> {
 
     public List<User> findAll() {
         return (List<User>) run(jedis -> {
-            return jedis.smembers(name() + ":keys").stream().map((key) -> findById(key)).collect(Collectors.toList());
+            return jedis.smembers(name() + ":keys").stream().map((key) -> findById(key)).filter(Objects::nonNull).collect(Collectors.toList());
         });
     }
 

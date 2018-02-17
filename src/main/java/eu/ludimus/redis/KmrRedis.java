@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class KmrRedis extends AbstractRedis<Kmr> {
         return (List<Kmr>) run(jedis -> {
             final String userKmrDateKey = User.class.getSimpleName().toLowerCase() + ':' + user.getId() + ":kmrDay";
             final Set<String> keys = jedis.zrangeByScore(userKmrDateKey, from.getTime(), to.getTime());
-            return keys.stream().map((key) -> findById(key)).collect(Collectors.toList());
+            return keys.stream().map((key) -> findById(key)).filter(Objects::nonNull).collect(Collectors.toList());
         });
     }
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,7 +68,7 @@ public class TicketRedis extends AbstractRedis<Ticket> {
         return (List<Ticket>) run(jedis -> {
             final String userTicketDateKey = User.class.getSimpleName().toLowerCase() + ':' + user.getId() + ":ticketdate";
             final Set<String> keys = jedis.zrangeByScore(userTicketDateKey, from.getTime(), to.getTime());
-            return keys.stream().map((key) -> findById(key)).collect(Collectors.toList());
+            return keys.stream().map((key) -> findById(key)).filter(Objects::nonNull).collect(Collectors.toList());
         });
     }
 
