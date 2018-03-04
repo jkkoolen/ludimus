@@ -23,4 +23,9 @@ Go on the project's root folder, then type:
 #### Redis
 This app stores all data in a redis db which is a inmem db with persitence to disk
 
+
+### Google drive access, 
+The first time the google drive is accessed the api returns a url. This url must be openened
+on the machine where this springboot applications runs to store the credentials on that machine.
+For me this is already done. 
 ``
