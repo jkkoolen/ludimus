@@ -5,12 +5,13 @@
 
     <groupId>eu.ludimus</groupId>
     <artifactId>ludimus</artifactId>
-    <version>0.0.6-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <version>1.0.6-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.3.RELEASE</version>
+        <version>2.0.0.RELEASE</version>
     </parent>
 
     <properties>
@@ -27,6 +28,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.kstyrc</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.6</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
@@ -35,6 +41,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>converters</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>googledrive</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>

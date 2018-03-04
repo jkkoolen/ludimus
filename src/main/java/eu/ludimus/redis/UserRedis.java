@@ -69,9 +69,7 @@ public class UserRedis extends AbstractRedis<User> {
     }
 
     public List<User> findAll() {
-        return (List<User>) run(jedis -> {
-            return jedis.smembers(name() + ":keys").stream().map((key) -> findById(key)).filter(Objects::nonNull).collect(Collectors.toList());
-        });
+        return (List<User>) run(jedis -> jedis.smembers(name() + ":keys").stream().map((key) -> findById(key)).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
     private String name() {

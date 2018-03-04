@@ -1,24 +1,12 @@
-spring:
-    datasource:
-        password: build
-        url: jdbc:mysql://localhost:3306/ludimus?useSSL=false
-        username: build
-        testOnBorrow: true
-        validationQuery: SELECT 1
-    jpa:
-        hibernate:
-            ddl-auto: update
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.MySQL5Dialect
-        show-sql: false
-
 logging:
   level:
     org:
       hibernate:
         type: error
   file: ludimus-debug.log
+
+google:
+  mapsUrl: https://maps.googleapis.com/maps/api/distancematrix/json
 
 jedis:
   pool:

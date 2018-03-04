@@ -24,3 +24,5 @@ tmp/
 .idea_modules
 .project
 RUNNING_PID
+jkkoolen.json
+static/

@@ -3,8 +3,6 @@ package eu.ludimus.service;
 import eu.ludimus.model.Auth;
 import eu.ludimus.model.User;
 import eu.ludimus.redis.UserRedis;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,6 @@ import static eu.ludimus.hash.HashUtil.toHex;
 
 @Service
 public class UserService {
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private UserRedis userRedis;
 

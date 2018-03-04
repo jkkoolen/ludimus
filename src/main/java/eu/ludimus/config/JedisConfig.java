@@ -11,7 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
-public class JeditConfig {
+public class JedisConfig {
     @Value("${jedis.pool.host}")
     private String jedisHost;
 

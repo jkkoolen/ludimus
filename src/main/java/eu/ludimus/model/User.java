@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@JsonSerialize(using = UserSerializer.class)
+//@JsonSerialize(using = UserSerializer.class)
 @Builder
 @Getter
 @NoArgsConstructor

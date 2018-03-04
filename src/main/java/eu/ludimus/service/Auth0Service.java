@@ -4,8 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import eu.ludimus.model.Token;
 import eu.ludimus.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class Auth0Service {
-    private static Logger logger = LoggerFactory.getLogger(Auth0Service.class);
     @Autowired
     private UserService userService;
 
@@ -33,7 +32,7 @@ public class Auth0Service {
         final JWT decode = JWT.decode(token.getToken());
         final Date exp = decode.getClaim("exp").asDate();
         if(exp.getTime() < new Date().getTime()) {
-            logger.debug("Your token has been expired!");
+            log.debug("Your token has been expired!");
             return false;
         }
 
@@ -42,22 +41,38 @@ public class Auth0Service {
             final long id = Long.parseLong(decode.getClaim("id").asString());
             user = userService.findById(id);
             if (user == null) {
-                logger.debug("User {} not known!", id);
+                log.debug("User {} not known!", id);
                 return false;
             }
         }catch(NumberFormatException e) {
-            logger.debug("JWT contains invalid id");
+            log.debug("JWT contains invalid id");
         }
-        return (decode.getClaim("email").asString().equals(user.getEmail()));
+        return decode.getClaim("email").asString().equals(user.getEmail());
     }
 
-    public Long idFromAuthorizationHeader(final String authorization) {
-        Long id = -1L;
-        if(authorization != null && authorization.startsWith("Bearer ")) {
-            final String token = authorization.substring("Bearer".length()).trim();
-            final JWT jwt = JWT.decode(token);
-            id = Long.parseLong(jwt.getClaim("id").asString());
+    public User userForToken(final Token token) {
+        final JWT decode = JWT.decode(token.getToken());
+        final Date exp = decode.getClaim("exp").asDate();
+        if(exp.getTime() < new Date().getTime()) {
+            log.debug("Your token has been expired!");
+            return null;
         }
-        return id;
+        try {
+            final long id = Long.parseLong(decode.getClaim("id").asString());
+            return userService.findById(id);
+        }catch(NumberFormatException e) {
+            log.debug("JWT contains invalid id");
+        }
+        return null;
     }
+
+//    public Long idFromAuthorizationHeader(final String authorization) {
+//        Long id = -1L;
+//        if(authorization != null && authorization.startsWith("Bearer ")) {
+//            final String token = authorization.substring("Bearer".length()).trim();
+//            final JWT jwt = JWT.decode(token);
+//            id = Long.parseLong(jwt.getClaim("id").asString());
+//        }
+//        return id;
+//    }
 }

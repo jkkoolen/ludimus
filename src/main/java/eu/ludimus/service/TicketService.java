@@ -3,8 +3,6 @@ package eu.ludimus.service;
 import eu.ludimus.model.Ticket;
 import eu.ludimus.model.User;
 import eu.ludimus.redis.TicketRedis;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,6 @@ import java.util.List;
 
 @Service
 public class TicketService {
-    private final Logger logger = LoggerFactory.getLogger(TicketService.class);
     @Autowired
     private TicketRedis ticketRedis;
 

@@ -8,8 +8,6 @@ import java.io.IOException;
 
 @Component
 public abstract class AbstractRedis<T> extends DefaultRedisRunner implements Redis<T> {
-    private T type;
-
     private ObjectMapper mapper = new ObjectMapper();
 
     public String toJson(final T object) throws JsonProcessingException {

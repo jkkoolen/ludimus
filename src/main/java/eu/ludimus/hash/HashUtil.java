@@ -1,12 +1,11 @@
 package eu.ludimus.hash;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.security.MessageDigest;
 
+@Slf4j
 public class HashUtil {
-    private static Logger LOG  = LoggerFactory.getLogger(HashUtil.class);
     private HashUtil() {
 
     }
@@ -17,7 +16,7 @@ public class HashUtil {
             md5.update(password.getBytes());
             return md5.digest();
         } catch(Exception e) {
-            LOG.error("Error digesting password ", e);
+            log.error("Error digesting password ", e);
             return new byte[0];
         }
     }

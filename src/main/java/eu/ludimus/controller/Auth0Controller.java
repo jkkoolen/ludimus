@@ -18,7 +18,6 @@ public class Auth0Controller {
 
     @Autowired
     public Auth0Controller(UserService userService, Auth0Service auth0Service) {
-
         this.userService = userService;
         this.auth0Service = auth0Service;
     }

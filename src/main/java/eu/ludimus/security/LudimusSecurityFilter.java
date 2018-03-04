@@ -24,24 +24,27 @@ import java.io.IOException;
 @Slf4j
 public class LudimusSecurityFilter implements Filter {
 
+    public static final String USER_KEY = "user";
     @Autowired
     private Auth0Service auth0Service;
 
     @Autowired
     private LudimusProperties ludimusProperties;
 
+    @Autowired
+    private UserRequestUtil userRequestUtil;
+
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info(request.getRemoteAddr());
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
         final String requestURI = httpRequest.getRequestURI();
 
-        if(ludimusProperties.isStatic(requestURI)) {
+            if(ludimusProperties.isStatic(requestURI)) {
             chain.doFilter(request, response);
             return;
         }
@@ -57,7 +60,7 @@ public class LudimusSecurityFilter implements Filter {
             return;
         }
 
-        if(validToken(httpRequest.getHeader(HttpHeaders.AUTHORIZATION)))
+        if(validToken(httpRequest))
         {
             chain.doFilter(request, response);
             return;
@@ -73,10 +76,16 @@ public class LudimusSecurityFilter implements Filter {
         return "OPTIONS".equals(request.getMethod());
     }
 
-    private boolean validToken(final String header) {
+    private boolean validToken(HttpServletRequest request) {
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(header != null && header.startsWith("Bearer ")) {
-            final String token = header.substring("Bearer".length()).trim();
-            return auth0Service.isValid(new Token(token));
+            final String bearer = header.substring("Bearer".length()).trim();
+            Token token = new Token(bearer);
+            boolean valid = auth0Service.isValid(token);
+            if(valid) {
+                userRequestUtil.setUser(request, auth0Service.userForToken(token));
+            }
+            return valid;
         }
         return false;
     }
