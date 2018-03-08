@@ -55,6 +55,13 @@ public class TicketController {
     }
 
     @CrossOrigin
+    @RequestMapping(value = "/ludimus/deleteTicket", method = RequestMethod.DELETE)
+    @ResponseBody
+    public Boolean deleteTicket(final @RequestParam Long ticketId) {
+        return ticketService.deleteTicket(userRequestUtil.getUser(), ticketId);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/ludimus/getFilesUploadedInTheLastNDays", method = RequestMethod.GET)
     @ResponseBody
     public List<File> getFilesUploadedInTheLastNDays(final @RequestParam int dayCount) throws IOException {

@@ -24,4 +24,7 @@ public class TicketService {
         return ticketRedis.save(ticket);
     }
 
+    public Boolean deleteTicket(final User user, final Long ticketId) {
+        return ticketRedis.delete(user, ticketId);
+    }
 }

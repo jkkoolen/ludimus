@@ -95,4 +95,14 @@ public class TicketRedis extends AbstractRedis<Ticket> {
             return list;
         });
     }
+
+    public Boolean delete(final User user, final Long ticketId) {
+        final String key = name(Ticket.class) + ':' + ticketId + ":" + name(User.class) + ":" + user.getId();
+        final String keysKey = name(Ticket.class) + ":keys:" + name(User.class) + ":" + user.getId();
+        return (Boolean) run(jedis -> {
+            boolean result = jedis.del(key) > 0;
+            jedis.srem(keysKey, key);
+            return result;
+        });
+    }
 }
