@@ -3,6 +3,7 @@ package eu.ludimus.controller;
 import eu.ludimus.exception.InvalidException;
 import eu.ludimus.model.*;
 import eu.ludimus.exception.NotAuthorizedException;
+import eu.ludimus.redis.AlreadyExistsException;
 import eu.ludimus.service.Auth0Service;
 import eu.ludimus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,22 @@ public class Auth0Controller {
         }
         user.setPassword(auth.getNewPassword1());
         return auth0Service.createToken(userService.save(user));
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/ludimus/createUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean createUser(final @RequestBody Auth auth) {
+        final User user = User.builder().email(auth.getEmail()).password(auth.getPassword()).build();
+        User savedUser = userService.save(user);
+        return savedUser != null;
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    public ErrorInfo alreadyExists(final AlreadyExistsException e) {
+        return new ErrorInfo("ALREADY_EXISTS", e.getMessage());
+
     }
 
     @ExceptionHandler(NotAuthorizedException.class)

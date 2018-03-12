@@ -16,6 +16,7 @@ ludimus:
   filter:
     authorized:
       - path: /ludimus/login
+      - path: /ludimus/createUser
       - path: /ludimus/distance
     forwards:
       - path: /ludimus/tax

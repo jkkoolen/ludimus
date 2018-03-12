@@ -18,7 +18,11 @@ public class UserService {
         if(auth == null) {
             return null;
         }
-        return userRedis.findByEmailAndPassword(auth.getEmail(), toHex(md5(auth.getPassword())));
+        User user = userRedis.findByEmail(auth.getEmail());
+        if(user != null && user.getPassword().equals(toHex(md5(auth.getPassword())))) {
+            return user;
+        }
+        return null;
     }
 
     public User save(final User user) {
@@ -28,5 +32,9 @@ public class UserService {
 
     public User findById(Long id) {
         return userRedis.findById("user:" + id);
+    }
+
+    public User findByEmail(final String email) {
+        return userRedis.findByEmail(email);
     }
 }

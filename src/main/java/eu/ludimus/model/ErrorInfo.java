@@ -1,5 +1,8 @@
 package eu.ludimus.model;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorInfo {
     private String code;
     private String message;
@@ -8,13 +11,4 @@ public class ErrorInfo {
         this.code = code;
         this.message = message;
     }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
 }

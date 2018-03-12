@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 public class UserRedis extends AbstractRedis<User> {
     @Override
     public User save(final User user) {
+        if(findByEmail(user.getEmail()) != null) {
+            throw new AlreadyExistsException(String.format("Error, user with email %s already exists!", user.getEmail()));
+        }
         return (User) run(jedis -> {
             boolean isNew = user.getId() == null;
             if(isNew) {
@@ -24,10 +27,11 @@ public class UserRedis extends AbstractRedis<User> {
             }
             user.setId(getId(User.class, user.getId()));
             final String key = name() + ':' + user.getId();
+
             jedis.sadd(name() + ":keys", key);
             try {
                 jedis.set(key, toJson(user));
-                saveByEmailAndPassword(user.getEmail(), user.getPassword(), key);
+                saveByEmail(user.getEmail(), key);
                 return user;
             } catch (JsonProcessingException e) {
                 throw new RedisException(e);
@@ -35,16 +39,16 @@ public class UserRedis extends AbstractRedis<User> {
         });
     }
 
-    void saveByEmailAndPassword(final String email, final String password, final String key) {
+    void saveByEmail(final String email, final String key) {
         run(jedis -> {
-            jedis.set(name() + ':' + email + password, key);
+            jedis.set(name() + ':' + email, key);
             return null;
         });
     }
 
-    public User findByEmailAndPassword(final String email, final String password) {
+    public User findByEmail(final String email) {
         return (User) run(jedis -> {
-            final String key = jedis.get(name() + ':' + email + password);
+            final String key = jedis.get(name() + ':' + email);
             if(key == null) {
                 return null;
             }
