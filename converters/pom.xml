@@ -9,7 +9,7 @@
     <version>0.0.1</version>
 
     <properties>
-        <pdfbox.version>1.8.10</pdfbox.version>
+        <pdfbox.version>1.8.16</pdfbox.version>
         <junit.version>4.12</junit.version>
         <java.version>1.8</java.version>
         <spring-boot-maven-plugin.version>1.5.8.RELEASE</spring-boot-maven-plugin.version>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>net.sourceforge.tess4j</groupId>
             <artifactId>tess4j</artifactId>
-            <version>LATEST</version>
+            <version>4.1.0</version>
         </dependency>
 
     </dependencies>
