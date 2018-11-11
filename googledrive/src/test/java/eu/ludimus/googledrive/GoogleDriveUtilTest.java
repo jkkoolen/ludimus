@@ -9,7 +9,7 @@ public class GoogleDriveUtilTest {
 
     @org.junit.Test
     public void getFilesUploadedInTheLastNDaysBy() throws IOException {
-        List<File> files = GoogleDriveUtil.getFilesUploadedInTheLastNDaysBy(17, "jkkoolen");
+        List<File> files = GoogleDriveUtil.getFilesUploadedInTheLastNDaysBy(17, "sannevandegraaf@gmail.com");
         System.out.println(files);
     }
 }

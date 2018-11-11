@@ -1,12 +1,11 @@
 package eu.ludimus.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.ludimus.exception.InvalidException;
+import eu.ludimus.controller.exception.InvalidPasswordException;
 import eu.ludimus.model.ErrorInfo;
 import eu.ludimus.model.Kmr;
-import eu.ludimus.model.User;
 import eu.ludimus.model.googleapi.DistanceResponse;
-import eu.ludimus.security.UserRequestUtil;
+import eu.ludimus.authorization.UserRequestUtil;
 import eu.ludimus.service.KmrService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.io.IOUtils;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -62,7 +60,7 @@ public class DistanceMatrixServiceController {
         kmr.setUser(userRequestUtil.getUser());
         final Kmr lastKmr = kmrService.getLastKmr(kmr.getUser().getId());
         if(lastKmr != null && lastKmr.getEndTotal() - kmr.getStartTotal() > 5) { //if difference is more then 5 km throw exception
-            throw new InvalidException("Difference to big with last registration, probably you mist one");
+            throw new InvalidPasswordException("Difference to big with last registration, probably you mist one");
         }
         if(lastKmr != null) {
             kmr.setStartTotal(lastKmr.getEndTotal()); //to make it watertight
@@ -83,9 +81,9 @@ public class DistanceMatrixServiceController {
         return (HttpsURLConnection) new URL(String.format("%s?origins=%s&destinations=%s&key=AIzaSyC40StbkB4K95HIPUdWufzvF1QDSUPzJQ4", mapsUrl, URLEncoder.encode(origins, "utf-8"), URLEncoder.encode(destinations, "utf-8"))).openConnection();
     }
 
-    @ExceptionHandler(InvalidException.class)
+    @ExceptionHandler(InvalidPasswordException.class)
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    public ErrorInfo invalid(final InvalidException e) {
+    public ErrorInfo invalid(final InvalidPasswordException e) {
         return new ErrorInfo("BAD_REQUEST", e.getMessage());
 
     }

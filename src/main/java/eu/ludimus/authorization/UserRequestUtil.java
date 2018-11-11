@@ -1,4 +1,4 @@
-package eu.ludimus.security;
+package eu.ludimus.authorization;
 
 import eu.ludimus.model.User;
 import org.springframework.stereotype.Component;

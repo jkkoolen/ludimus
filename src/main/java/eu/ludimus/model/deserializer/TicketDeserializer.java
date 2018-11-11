@@ -11,7 +11,7 @@ import eu.ludimus.converter.ConverterFactoy;
 import eu.ludimus.googledrive.GoogleDriveUtil;
 import eu.ludimus.model.Ticket;
 import eu.ludimus.model.User;
-import eu.ludimus.security.UserRequestUtil;
+import eu.ludimus.authorization.UserRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,12 +1,14 @@
 package eu.ludimus.redis;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.ludimus.model.Ticket;
 import eu.ludimus.model.User;
+import eu.ludimus.properties.LudimusProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -19,31 +21,44 @@ import java.util.stream.Collectors;
 public class TicketRedis extends AbstractRedis<Ticket> {
     @Autowired
     private FuzzyTextRedis fuzzyTextRedis;
+    @Autowired
+    private LudimusProperties ludimusProperties;
 
     @Override
     public Ticket save(final Ticket ticket) {
         return (Ticket) run(jedis -> {
             boolean isNew = ticket.getId() == null;
             if(isNew) {
-                ticket.preUpdate();
-            } else {
                 ticket.prePersist();
+            } else {
+                ticket.preUpdate();
             }
             ticket.setId(getId(Ticket.class, ticket.getId()));
             final String key = name(Ticket.class) + ':' + ticket.getId() + ":" + name(User.class) + ":" + ticket.getUser().getId();
             jedis.sadd(name(Ticket.class) + ":keys:" + name(User.class) + ":" + ticket.getUser().getId(), key);
             try {
                 User user = ticket.getUser();
-                ticket.setUser(null); //because there is no use to store the user in the ticket
+                ticket.resetUser(); //because there is no use to store the user in the ticket
+                saveImage(ticket, key);
                 fuzzyTextRedis.save(key, ticket.getDescription());
                 final String value = toJson(ticket);
                 jedis.set(key, value);
                 saveByUserAndTicketDate(user, ticket.getTicketDate(), key);
                 return ticket;
-            } catch (JsonProcessingException e) {
+            } catch (IOException e) {
+                log.warn(e.getMessage(), e);
                 throw new RedisException(e);
             }
         });
+    }
+
+    private void saveImage(final Ticket ticket, final String key) throws IOException {
+        final String path = ludimusProperties.getDataDir() + '/' + key.replaceAll(":", "_");
+
+        new File(path).mkdirs();
+        FileOutputStream out = new FileOutputStream(path + '/' + ticket.getInvoiceNumber() + ".jpg");
+        out.write(ticket.getTicketImage());
+        out.close();
     }
 
     public List<Ticket> orSearchByUser(final User user, final String... values) {

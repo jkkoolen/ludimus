@@ -45,4 +45,12 @@ public class Ticket extends BaseEntity {
     private Integer depreciationYears;
 
     private Integer yearOfEntry;
+
+    public void resetImage() {
+        this.ticketImage  = null;
+    }
+
+    public void resetUser() {
+        this.user = null;
+    }
 }

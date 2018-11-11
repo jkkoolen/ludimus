@@ -21,9 +21,9 @@ public class UserRedis extends AbstractRedis<User> {
         return (User) run(jedis -> {
             boolean isNew = user.getId() == null;
             if(isNew) {
-                user.preUpdate();
-            } else {
                 user.prePersist();
+            } else {
+                user.preUpdate();
             }
             user.setId(getId(User.class, user.getId()));
             final String key = name() + ':' + user.getId();

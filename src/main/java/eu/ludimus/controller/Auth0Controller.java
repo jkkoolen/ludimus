@@ -1,8 +1,8 @@
 package eu.ludimus.controller;
 
-import eu.ludimus.exception.InvalidException;
+import eu.ludimus.controller.exception.InvalidPasswordException;
 import eu.ludimus.model.*;
-import eu.ludimus.exception.NotAuthorizedException;
+import eu.ludimus.authorization.NotAuthorizedException;
 import eu.ludimus.redis.AlreadyExistsException;
 import eu.ludimus.service.Auth0Service;
 import eu.ludimus.service.UserService;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 
 @RestController
+@RequestMapping("/ludimus")
 public class Auth0Controller {
     private final UserService userService;
     private final Auth0Service auth0Service;
@@ -24,7 +25,7 @@ public class Auth0Controller {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/ludimus/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public Token login(final @RequestBody Auth auth) throws UnsupportedEncodingException {
         final User user = userService.findByAuth(auth);
@@ -35,7 +36,7 @@ public class Auth0Controller {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/ludimus/changeLogin", method = RequestMethod.POST)
+    @RequestMapping(value = "/secure/changeLogin", method = RequestMethod.POST)
     @ResponseBody
     public Token changeLogin(final @RequestBody ChangeAuth auth) throws UnsupportedEncodingException {
         final User user = userService.findByAuth(auth);
@@ -43,14 +44,14 @@ public class Auth0Controller {
             throw new NotAuthorizedException("User is not authorized to change password");
         }
         if(auth.getNewPassword1() == null || auth.getNewPassword2() == null || !auth.getNewPassword1().equals(auth.getNewPassword2())) {
-            throw new InvalidException("new passwords are empty or not equal");
+            throw new InvalidPasswordException("new passwords are empty or not equal");
         }
         user.setPassword(auth.getNewPassword1());
         return auth0Service.createToken(userService.save(user));
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/ludimus/createUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/secure/createUser", method = RequestMethod.POST)
     @ResponseBody
     public Boolean createUser(final @RequestBody Auth auth) {
         final User user = User.builder().email(auth.getEmail()).password(auth.getPassword()).build();
@@ -72,9 +73,9 @@ public class Auth0Controller {
 
     }
 
-    @ExceptionHandler(InvalidException.class)
+    @ExceptionHandler(InvalidPasswordException.class)
     @ResponseStatus(value=HttpStatus.BAD_REQUEST)
-    public ErrorInfo invalid(final InvalidException e) {
+    public ErrorInfo invalid(final InvalidPasswordException e) {
         return new ErrorInfo("BAD_REQUEST", e.getMessage());
 
     }
